@@ -1,0 +1,11 @@
+{
+  "Id": "TweakOrTreat",
+  "DisplayName": "Tweak or Treat",
+  "Author": "edoipi",
+  "Version": "0.0.1",
+  "ManagerVersion": "0.22.9",
+  "Requirements": [ "CallOfTheWild" ],
+  "AssemblyName": "TweakOrTreat.dll",
+  "HomePage": "",
+  "EntryMethod": "TweakOrTreat.Main.Load"
+}
