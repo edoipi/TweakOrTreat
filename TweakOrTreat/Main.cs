@@ -94,12 +94,18 @@ namespace TweakOrTreat
                     CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
 
                     //Core.load();
-                    if(quickerBardicPerformance)
+                    OceansEcho.load();
+                    if (quickerBardicPerformance)
                         BardicPerformance.load();
                     //Planetouched.load();
                     Mindchemist.load();
                     MutationWarrior.load();
                     ExtraDiscovery.load();
+                    WildStalker.load();
+                    //NirmathiIrregular.load();
+                    ArcaneDiscoveryExploit.load();
+                    Estoc.load();
+                    
 
 #if DEBUG
                     string guid_file_name = @"./Mods/TweakOrTreat/blueprints.txt";

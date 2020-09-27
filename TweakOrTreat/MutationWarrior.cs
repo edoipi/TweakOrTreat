@@ -124,8 +124,7 @@ namespace TweakOrTreat
                 "Mutagen Discovery",
                 "At 7th level and every 4 levels thereafter, the mutation warrior can choose one of the following alchemist discoveries " +
                 "to augment his abilities: feral mutagen, grand mutagen, greater mutagen, nauseating flesh, preserve organs, spontaneous healing, " +
-                "feral wings. The mutagen warrior uses his fighter level as his effective alchemist level for the purpose of these discoveries. " +
-                "This ability replaces armor training 2, 3, 4, and armor mastery.",
+                "feral wings. The mutagen warrior uses his fighter level as his effective alchemist level for the purpose of these discoveries.",
                 "",
                 null,
                 FeatureGroup.None
@@ -136,7 +135,7 @@ namespace TweakOrTreat
             var warriorMutagen = Helpers.CreateFeature(
                 "MuTagenmutationwarrior",
                 mutagen.Name,
-                "At 3rd level, a mutation warrior discovers how to create a mutagen that he can imbibe in order to heighten his physical prowess at the cost of his personality. This ability functions as the alchemist’s mutagen ability, using his fighter level as his alchemist level.\n\n" + mutagen.Description,
+                "At 3rd level, a mutation warrior discovers how to create a mutagen that he can imbibe in order to heighten his physical prowess at the cost of his personality. This ability functions as the alchemist’s mutagen ability, using his fighter level as his alchemist level.\n" + mutagen.Description,
                 "",
                 mutagen.Icon,
                 FeatureGroup.None,

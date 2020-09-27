@@ -50,17 +50,20 @@ namespace TweakOrTreat
                 Helpers.LevelEntry(20, discoveries),
             };
 
-            var perfectRecall = Helpers.CreateFeature("PerfectRecallfeature",
-                                                           "Perfect Recall",
-                                                           "At 2nd level, a mindchemist has honed his memory. When making a Knowledge check, he may add his Intelligence bonus on the check a second time. Thus, a mindchemist with 5 ranks in Knowledge (world) and a +2 Intelligence bonus has a total skill bonus of +9 (5 + 2 + 2) using this ability.",
-                                                           "",
-                                                           null,
-                                                           FeatureGroup.None,
-                                                           Helpers.CreateAddContextStatBonus(StatType.SkillKnowledgeArcana, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
-                                                           Helpers.CreateAddContextStatBonus(StatType.SkillKnowledgeWorld, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
-                                                           Helpers.CreateContextRankConfig(ContextRankBaseValueType.StatBonus, stat: StatType.Intelligence, min: 0, type: AbilityRankType.StatBonus),
-                                                           Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Intelligence)
-                                                           );
+            var perfectRecall = Helpers.CreateFeature(
+                "PerfectRecallfeature",
+                "Perfect Recall",
+                "At 2nd level, a mindchemist has honed his memory. When making a Knowledge check, he may add his Intelligence bonus on the check a second time. Thus, a mindchemist with 5 ranks in Knowledge (world) and a +2 Intelligence bonus has a total skill bonus of +9 (5 + 2 + 2) using this ability.",
+                "",
+                null,
+                FeatureGroup.None,
+                Helpers.CreateAddContextStatBonus(StatType.SkillKnowledgeArcana, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
+                Helpers.CreateAddContextStatBonus(StatType.SkillKnowledgeWorld, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
+                Helpers.CreateAddContextStatBonus(StatType.SkillLoreNature, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
+                Helpers.CreateAddContextStatBonus(StatType.SkillLoreReligion, ModifierDescriptor.UntypedStackable, rankType: AbilityRankType.StatBonus),
+                Helpers.CreateContextRankConfig(ContextRankBaseValueType.StatBonus, stat: StatType.Intelligence, min: 0, type: AbilityRankType.StatBonus),
+                Helpers.Create<RecalculateOnStatChange>(r => r.Stat = StatType.Intelligence)
+            );
 
             
             mindchemistDiscovery = library.CopyAndAdd(discoveries, "MindchemistDiscovery", "");
@@ -76,15 +79,16 @@ namespace TweakOrTreat
             var cognatogen = library.Get<BlueprintFeature>("e3f460ea61fcc504183c7d6818bbbf7a");
             var mutagenResource = library.Get<BlueprintAbilityResource>("3b163587f010382408142fc8a97852b6");
 
-            var cognatogenWithResource = Helpers.CreateFeature("CognatogenWithResource",
-                                                   cognatogen.Name,
-                                                   cognatogen.Description,
-                                                   "",
-                                                   cognatogen.Icon,
-                                                   FeatureGroup.None,
-                                                   Helpers.CreateAddFact(cognatogen),
-                                                   Helpers.CreateAddAbilityResource(mutagenResource)
-                                                   );
+            var cognatogenWithResource = Helpers.CreateFeature(
+                "CognatogenWithResource",
+                cognatogen.Name,
+                cognatogen.Description,
+                "",
+                cognatogen.Icon,
+                FeatureGroup.None,
+                Helpers.CreateAddFact(cognatogen),
+                Helpers.CreateAddAbilityResource(mutagenResource)
+             );
 
             archetype.AddFeatures = new LevelEntry[] {
                 Helpers.LevelEntry(1, cognatogenWithResource),
