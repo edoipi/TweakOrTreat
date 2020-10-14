@@ -1,3 +1,7 @@
 {
-	"quicker_bardic_performance": true
+  "quicker_bardic_performance": true,
+  "two_handed_preview": true,
+  "slashing_fencing": true,
+  "no_hand_in_the_air": true,
+  "no_two_handed_rapier":  true
 }

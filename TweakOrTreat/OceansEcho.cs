@@ -133,7 +133,8 @@ namespace TweakOrTreat
                 Helpers.LevelEntry(1, 
                     CallOfTheWild.Oracle.revelation_selection, 
                     CallOfTheWild.Oracle.oracle_mysteries,
-                    CallOfTheWild.Oracle.mystery_skills),
+                    CallOfTheWild.Oracle.mystery_skills
+                ),
                 Helpers.LevelEntry(3, CallOfTheWild.Oracle.revelation_selection),
                 Helpers.LevelEntry(15, CallOfTheWild.Oracle.revelation_selection)
             };
@@ -149,6 +150,9 @@ namespace TweakOrTreat
             oracle.Progression.UIGroups = oracle.Progression.UIGroups.AddToArray(
                 Helpers.CreateUIGroup(inspireCourageFeature, inspireCompetenceFeature, inspireHeroicsFeature)
             );
+
+            var discordantVocieFeature = library.Get<BlueprintFeature>("8064adc641c74e4cb821ce048ecd83a2");
+            discordantVocieFeature.AddComponent(Common.createPrerequisiteArchetypeLevel(oracle, archetype, 8, any: true));
         }
     }
 }

@@ -21,6 +21,10 @@ namespace TweakOrTreat
     internal class Main
     {
         public static bool quickerBardicPerformance;
+        public static bool twoHandedPreview;
+        public static bool slashingFencing;
+        public static bool noHandInTheAir;
+        public static bool noTwoHandedRapier;
         internal class Settings
         {
             internal Settings()
@@ -32,6 +36,10 @@ namespace TweakOrTreat
                     JObject jo = (JObject)JToken.ReadFrom(reader);
 
                     quickerBardicPerformance = (bool)jo["quicker_bardic_performance"];
+                    twoHandedPreview = (bool)jo["two_handed_preview"];
+                    slashingFencing = (bool)jo["slashing_fencing"];
+                    noHandInTheAir = (bool)jo["no_hand_in_the_air"];
+                    noTwoHandedRapier = (bool)jo["no_two_handed_rapier"];
                 }
             }
         }
@@ -74,6 +82,7 @@ namespace TweakOrTreat
         }
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [Harmony12.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
+        [Harmony12.HarmonyAfter("RacesUnleashed")]
         static class LibraryScriptableObject_LoadDictionary_Patch
         {
             static void Postfix(LibraryScriptableObject __instance)
@@ -95,8 +104,10 @@ namespace TweakOrTreat
 
                     //Core.load();
                     OceansEcho.load();
+
                     if (quickerBardicPerformance)
                         BardicPerformance.load();
+
                     //Planetouched.load();
                     Mindchemist.load();
                     MutationWarrior.load();
@@ -104,8 +115,12 @@ namespace TweakOrTreat
                     WildStalker.load();
                     //NirmathiIrregular.load();
                     ArcaneDiscoveryExploit.load();
-                    Estoc.load();
-                    
+
+                    Halfling.load();
+                    Human.load();
+
+                    Ki.load();
+                    SylvanTrickster.load();
 
 #if DEBUG
                     string guid_file_name = @"./Mods/TweakOrTreat/blueprints.txt";

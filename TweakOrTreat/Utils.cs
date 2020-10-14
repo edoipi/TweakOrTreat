@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using CallOfTheWild;
+using JetBrains.Annotations;
+using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Root.Strings;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace TweakOrTreat
 {
@@ -46,6 +49,17 @@ namespace TweakOrTreat
                 }
             }
             return unit.Progression.GetClassLevel(clazz) + num;
+        }
+
+        public static BlueprintFeature CreateFeature(string name, string displayName, string description, string guid, Sprite icon, FeatureGroup group, params BlueprintComponent[][] components)
+        {
+            List<BlueprintComponent> list = new List<BlueprintComponent>();
+            foreach(var componentArray in components)
+            {
+                list.AddRange(componentArray);
+            }
+
+            return Helpers.CreateFeature(name, displayName, description, guid, icon, group, list.ToArray());
         }
     }
 }

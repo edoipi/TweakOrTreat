@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>$(KINGMAKER_HOME)\Kingmaker_Data\Managed;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild</ReferencePath>
+    <ReferencePath>$(KINGMAKER_HOME)\Kingmaker_Data\Managed;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\RacesUnleashed</ReferencePath>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony12">
@@ -48,6 +48,10 @@
     </Reference>
     <Reference Include="CallOfTheWild">
       <HintPath>CallOfTheWild.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RacesUnleashed">
+      <HintPath>RacesUnleashed.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -117,7 +121,11 @@
     <Compile Include="Core.cs" />
     <Compile Include="Estoc.cs" />
     <Compile Include="ExtraDiscovery.cs" />
+    <Compile Include="Human.cs" />
+    <Compile Include="Halfling.cs" />
+    <Compile Include="Ki.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="SylvanTrickster.cs" />
     <Compile Include="Mindchemist.cs" />
     <Compile Include="MutationWarrior.cs" />
     <Compile Include="NirmathiIrregular.cs" />

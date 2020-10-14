@@ -4,8 +4,8 @@
   "Author": "edoipi",
   "Version": "0.1.1",
   "ManagerVersion": "0.22.9",
-  "Requirements": [ "CallOfTheWild" ],
-  "LoadAfter": ["RacesUnleashed"],
+  "Requirements": [ "CallOfTheWild", "RacesUnleashed" ],
+  "LoadAfter": [],
   "AssemblyName": "TweakOrTreat.dll",
   "HomePage": "",
   "EntryMethod": "TweakOrTreat.Main.Load"
