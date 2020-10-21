@@ -56,6 +56,47 @@ namespace TweakOrTreat
         }
     }
 
+    public class RemoveSkillPoint : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
+    {
+        public BlueprintFeatureSelection selection;
+
+        public void HandleLevelUpComplete(UnitEntityData unit, bool isChargen)
+        {
+        }
+
+        public override void OnFactActivate()
+        {
+            try
+            {
+                var levelUp = Game.Instance.UI.CharacterBuildController.LevelUpController;
+                if (Owner == levelUp.Preview || Owner == levelUp.Unit)
+                {
+                    levelUp.State.ExtraSkillPoints--;
+                }
+            }
+            catch (Exception e)
+            {
+                Main.logger.Error(e.ToString());
+            }
+        }
+
+        public override void OnFactDeactivate()
+        {
+            try
+            {
+                var levelUp = Game.Instance.UI.CharacterBuildController.LevelUpController;
+                if (Owner == levelUp.Preview || Owner == levelUp.Unit)
+                {
+                    levelUp.State.ExtraSkillPoints++;
+                }
+            }
+            catch (Exception e)
+            {
+                Main.logger.Error(e.ToString());
+            }
+        }
+    }
+
 
     public class RemoveSelection : OwnedGameLogicComponent<UnitDescriptor>, ILevelUpCompleteUIHandler
     {
@@ -118,7 +159,15 @@ namespace TweakOrTreat
                     c.Feature = library.Get<BlueprintFeature>("3adf9274a210b164cb68f472dc1e4544"); // skilled
                 }),
             };
-
+            var changedComponent = library.Get<BlueprintFeature>("3adf9274a210b164cb68f472dc1e4544").GetComponent<CallOfTheWild.NewMechanics.AddSkillPointOnEvenLevels>();
+            if (changedComponent == null)
+            {
+                //Main.logger.Log("we got null");
+                skilledComponents = skilledComponents.AddToArray(
+                    Helpers.Create<RemoveSkillPoint>()
+                );
+            }
+            //Main.logger.Log("we past getting null");
             var statBonuses = new List<BlueprintFeature>();
 
             foreach(var stat in StatTypeHelper.Attributes)

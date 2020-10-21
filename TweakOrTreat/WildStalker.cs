@@ -98,75 +98,110 @@ namespace TweakOrTreat
             var uncannyDodge = library.Get<BlueprintFeature>("3c08d842e802c3e4eb19d15496145709");
             var rageFeature = library.Get<BlueprintFeature>("2479395977cfeeb46b482bc3385f4647");
 
+            var fakeBarbarian = library.Get<BlueprintCharacterClass>("91f4c9284ca442a48beb010dc5778c06");
+
+            var rageResource = library.Get<BlueprintAbilityResource>("24353fcf8096ea54684a72bf58dedbc9");
             var rageOfTheWild = Helpers.CreateFeature(
                 "RageOfTheWild",
                 "Rage of the Wild",
-                "At 4th level, a wild stalker gains the rage ability as the barbarian class feature, but its barbarian level is considered to be his ranger level –3 for the purpose of qualifying for rage powers.",
+                "At 4th level, a wild stalker gains the rage ability as the barbarian class feature, but its barbarian level is considered to be his ranger level –3.",
                 "",
                 rageFeature.Icon,
                 FeatureGroup.None,
                 Helpers.CreateAddFact(rageFeature),
-                Helpers.CreateAddFact(barbarianLevel)
+                Helpers.CreateAddFact(barbarianLevel),
+                Helpers.Create<IncreaseResourcesByClassOnly>(
+                    i =>
+                    {
+                        i.CharacterClass = ranger;
+                        i.Resource = rageResource;
+                        i.levelAdjustment = -3;
+                        i.levelMult = 2;
+                        i.BaseValue = 2;
+                    }
+                ),
+                Helpers.Create<CallOfTheWild.FakeClassLevelMechanics.AddFakeClassLevel>(
+                    a => 
+                    {
+                        a.fake_class = fakeBarbarian;
+                        a.value = Helpers.CreateContextValue(AbilityRankType.Default);
+                    }
+                ),
+                Helpers.CreateContextRankConfig(
+                    ContextRankBaseValueType.ClassLevel, 
+                    classes: new BlueprintCharacterClass[] { ranger },
+                    progression: ContextRankProgression.BonusValue,
+                    stepLevel: -3
+                )
             );
             rageOfTheWild.HideInCharacterSheetAndLevelUp = true;
 
-            var rageResource = library.Get<BlueprintAbilityResource>("24353fcf8096ea54684a72bf58dedbc9");
-            var amount = Helpers.GetField(rageResource, "m_MaxAmount");
-            Helpers.SetField(amount, "Class", Helpers.GetField<BlueprintCharacterClass[]>(amount, "Class").AddToArray(ranger));
-            Helpers.SetField(amount, "Archetypes", Helpers.GetField<BlueprintArchetype[]>(amount, "Archetypes").AddToArray(archetype));
-            Helpers.SetField(rageResource, "m_MaxAmount", amount);
+            //var amount = Helpers.GetField(rageResource, "m_MaxAmount");
+            //Helpers.SetField(amount, "Class", Helpers.GetField<BlueprintCharacterClass[]>(amount, "Class").AddToArray(ranger));
+            //Helpers.SetField(amount, "Archetypes", Helpers.GetField<BlueprintArchetype[]>(amount, "Archetypes").AddToArray(archetype));
+            //Helpers.SetField(rageResource, "m_MaxAmount", amount);
 
+            //var rageBuff = library.Get<BlueprintBuff>("da8ce41ac3cd74742b80984ccc3c9613");
+            //ClassToProgression.addClassToBuff(ranger, new BlueprintArchetype[] { archetype }, rageBuff, barbarian);
+
+            //fake barbarian already added to relevant abilities
+            
             var ragePowerSelection = library.Get<BlueprintFeatureSelection>("28710502f46848d48b3f0d6132817c4e");
             var ragePowers = library.CopyAndAdd<BlueprintFeatureSelection>(ragePowerSelection, "RagePowerswildstalker", "");
             ragePowers.SetDescription("At 5th level, a wild stalker ranger gains a single rage power, as the barbarian class feature. He gains another rage power each four levels after 5th (to a maximum of four rage powers at 17th level).");
 
-            //buffs form rage powers that should scale with staler level, ripped straight from cotw 
-            //and not double checked that these are all that need to be updated
-            BlueprintBuff[] buffsToUpdateScaling = new BlueprintBuff[]{
-                library.Get<BlueprintBuff>("ec7db4946877f73439c4ee661f645452"), //beast totem ac buff
-                library.Get<BlueprintBuff>("3858dd3e9a94f0b41abdc58387d68ccf"), //guarded stance
-                library.Get<BlueprintBuff>("5b5e566167a3f2746b7d3a26bc8a50a6"), //guarded stance protect vitals
-                library.Get<BlueprintBuff>("b209f567dc78a1440aad52d4138c5f27"), //reflexive dodge
-                library.Get<BlueprintBuff>("0c6e198a78210954c9fe245a26b0c315"), //deadly accuracy
-                library.Get<BlueprintBuff>("9ec69854596674a4ba40802e6337894d"), //inspire ferocity buff
-                library.Get<BlueprintBuff>("c6271b3183c48d54b8defd272bea0665"), //lethal stance
-                library.Get<BlueprintBuff>("a8a733d2605c66548b652f312ea4dbf3"), //reckless stance
-                NewRagePowers.greater_celestial_totem_buff,
-                NewRagePowers.superstition_buff,
-                NewRagePowers.ghost_rager_buff,
-                NewRagePowers.witch_hunter_buff
-            };
-            buffsToUpdateScaling = buffsToUpdateScaling.AddToArray(NewRagePowers.energy_resistance_buff);
+            //foreach (var f in ragePowers.AllFeatures)
+            //{
+            //    ClassToProgression.addClassToFeat(ranger, new BlueprintArchetype[] { archetype }, ClassToProgression.DomainSpellsType.NoSpells, f, barbarian);
+            //}
 
-            //unlike skald adjustments here we need to add archetype and change type to acount only for archetyped levels
-            foreach (var b in buffsToUpdateScaling)
-            {
-                var c = b.GetComponent<ContextRankConfig>();
-                BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class");
-                classes = classes.AddToArray(ranger);
-                Helpers.SetField(c, "m_Class", classes);
-                Helpers.SetField(c, "Archetype", archetype);
-                Helpers.SetField(c, "m_BaseValueType", ContextRankBaseValueType.SummClassLevelWithArchetype);
-            }
+            ////buffs form rage powers that should scale with staler level, ripped straight from cotw 
+            ////and not double checked that these are all that need to be updated
+            //BlueprintBuff[] buffsToUpdateScaling = new BlueprintBuff[]{
+            //    library.Get<BlueprintBuff>("ec7db4946877f73439c4ee661f645452"), //beast totem ac buff
+            //    library.Get<BlueprintBuff>("3858dd3e9a94f0b41abdc58387d68ccf"), //guarded stance
+            //    library.Get<BlueprintBuff>("5b5e566167a3f2746b7d3a26bc8a50a6"), //guarded stance protect vitals
+            //    library.Get<BlueprintBuff>("b209f567dc78a1440aad52d4138c5f27"), //reflexive dodge
+            //    library.Get<BlueprintBuff>("0c6e198a78210954c9fe245a26b0c315"), //deadly accuracy
+            //    library.Get<BlueprintBuff>("9ec69854596674a4ba40802e6337894d"), //inspire ferocity buff
+            //    library.Get<BlueprintBuff>("c6271b3183c48d54b8defd272bea0665"), //lethal stance
+            //    library.Get<BlueprintBuff>("a8a733d2605c66548b652f312ea4dbf3"), //reckless stance
+            //    NewRagePowers.greater_celestial_totem_buff,
+            //    NewRagePowers.superstition_buff,
+            //    NewRagePowers.ghost_rager_buff,
+            //    NewRagePowers.witch_hunter_buff
+            //};
+            //buffsToUpdateScaling = buffsToUpdateScaling.AddToArray(NewRagePowers.energy_resistance_buff);
 
-            var renewedVigor = library.Get<BlueprintAbility>("5a25185dbf75a954580a1248dc694cfc");
-            var contextRankConfigs = renewedVigor.GetComponents<ContextRankConfig>();
-            foreach (var c in contextRankConfigs)
-            {
-                var t = Helpers.GetField<ContextRankBaseValueType>(c, "m_BaseValueType");
-                if (t == ContextRankBaseValueType.ClassLevel)
-                {
-                    BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class");
-                    classes = classes.AddToArray(ranger);
-                    Helpers.SetField(c, "m_Class", classes);
-                    Helpers.SetField(c, "Archetype", archetype);
-                    Helpers.SetField(c, "m_BaseValueType", ContextRankBaseValueType.SummClassLevelWithArchetype);
-                }
-            }
+            ////unlike skald adjustments here we need to add archetype and change type to acount only for archetyped levels
+            //foreach (var b in buffsToUpdateScaling)
+            //{
+            //    var c = b.GetComponent<ContextRankConfig>();
+            //    BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class");
+            //    classes = classes.AddToArray(ranger);
+            //    Helpers.SetField(c, "m_Class", classes);
+            //    Helpers.SetField(c, "Archetype", archetype);
+            //    Helpers.SetField(c, "m_BaseValueType", ContextRankBaseValueType.SummClassLevelWithArchetype);
+            //}
 
-            var howlScaling = NewRagePowers.terrifying_howl_ability.GetComponent<CallOfTheWild.NewMechanics.ContextCalculateAbilityParamsBasedOnClasses>();
-            howlScaling.CharacterClasses = howlScaling.CharacterClasses.AddToArray(ranger);
-            howlScaling.archetypes = howlScaling.archetypes.AddToArray(archetype);
+            //var renewedVigor = library.Get<BlueprintAbility>("5a25185dbf75a954580a1248dc694cfc");
+            //var contextRankConfigs = renewedVigor.GetComponents<ContextRankConfig>();
+            //foreach (var c in contextRankConfigs)
+            //{
+            //    var t = Helpers.GetField<ContextRankBaseValueType>(c, "m_BaseValueType");
+            //    if (t == ContextRankBaseValueType.ClassLevel)
+            //    {
+            //        BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(c, "m_Class");
+            //        classes = classes.AddToArray(ranger);
+            //        Helpers.SetField(c, "m_Class", classes);
+            //        Helpers.SetField(c, "Archetype", archetype);
+            //        Helpers.SetField(c, "m_BaseValueType", ContextRankBaseValueType.SummClassLevelWithArchetype);
+            //    }
+            //}
+
+            //var howlScaling = NewRagePowers.terrifying_howl_ability.GetComponent<CallOfTheWild.NewMechanics.ContextCalculateAbilityParamsBasedOnClasses>();
+            //howlScaling.CharacterClasses = howlScaling.CharacterClasses.AddToArray(ranger);
+            //howlScaling.archetypes = howlScaling.archetypes.AddToArray(archetype);
 
             var ragePowersOrSkills = library.CopyAndAdd<BlueprintFeatureSelection>(ragePowers, "WildTalent", "");
             ragePowersOrSkills.SetDescription("At 7th level, a wild stalker can either take a rage power, or gains a +2 insight bonus into any one of the following skills: " +

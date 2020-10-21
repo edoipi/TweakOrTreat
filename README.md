@@ -1,5 +1,7 @@
 Requires Call of the Wild and Races Unleashed to run
 
+Warning: from version 0.2.0 Call of the Wild version required is 1.112. What is more any Wild Stalker that is at least level 4 should be respecced to make rage powers work properly.
+
 Features:
 - Mindchemist Alchemist archetype - alchemist with cognatogen instead of mutagen
 - Mutation Warrior Fighter archetype - fighter with mutagen
@@ -18,18 +20,14 @@ optional:
 - hold weapons in two hands in inventory preview - experimental
 - replace estoc and rapier animation with one handed slashing weapon animation(still bad but in some ways looks better)
 - if holding weapon in one hand with other hand empty, character does not keep the empty hand high in the air
-
 Details:
-
 Mindchemist's Perfect Recall affects both "Knowledge" and "Lore" skills.
 Mindchemist loses first instance of poison resistance instead of poison use that does not exist in this game.
 This makes it so it does not stack with any other archetype right now, which is actually correct per pnp.
-
 Mutation Warrior stacks with alchemist in a following way: he stacks completely for the purpose of both qualifying
 and scaling for discoveries, but only those that can be selected by his Mutagen Discovery. His full level adds duration
 to the mutagen but only after he gets his mutagen at level 3(I might change that, but I am not sure which way I prefer it).
 Mutation Warrior does not qualify for Extra Discovery.
-
 Wild Stalker required some changes adapting it to the game engine and to actually make it work since noone proof read 
 it before publishing.
 There is no vision/darkness system in the game so everyone receives 2 perception bonus level 1.
@@ -37,14 +35,14 @@ Quarry, greater quarry and capstone were all useless as they depend of features 
 with greater rage, tireless rage and mighty rage.
 While the text mentions getting 8 rage powers total the listed progression didn't match(one of the powers would be at level 21)
 and the progression was very uneven, so I changed it to be every other level.
-
+From version 0.2.0 rage resource and rage powers scale with ranger level - 3 as they are supposed to thanks to Holic's fake level implementation.
 Ocean' Echo has no race requirements. Instead of pied piping she gets greater song of discord.
-
 Sylvan Trickster receives nothing in place of trapfinding(oh well...).
-
 Arcane Discovery exploit is not accessible for exploiter wizard.
-
 Unification of ki between classes: it makes it so every monk type, sacred fist warpriest, ninja and rogue with ki pool talent use the same resource, so multiclass characters can use their ki on abilities from any of those classes. When it comes to getting bonus to ki pool from stat you get it from all the stats that your classes allow, but only once per stat. For example monk/ninja will have pool scaling with wisdom and charisma, but scaled fist/ ninja will scale only with charisma bonus and not charisma bonus*2.
-
-Sensei and evangelist get move and swift bardic performance at level 7 and 13, as I believe it should be per pnp rule.
+Sensei, evangelist and ocean's echo  get move and swift bardic performance at level 7 and 13, as I believe it should be per pnp rule.
 This component can be turned off in settings.
+Credits:
+Holic92 both for Call of the Wild and direct help. This mod capitalizes a lot on Call of the Wild by directly using functions made by Holic and as reference to see how things can be done. Without it it would most likely never have been made.
+Spacehamster for Races Unleashed and tutoring.
+Zappastuff aka ThyWoof for the template project that helped a lot with starting this mod.

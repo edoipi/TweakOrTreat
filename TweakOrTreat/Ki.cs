@@ -53,7 +53,7 @@ namespace TweakOrTreat
         {
             int classLevel = base.Owner.Progression.GetClassLevel(this.CharacterClass);
             classLevel += levelAdjustment;
-            classLevel /= levelDiv;
+            classLevel = (int)( classLevel * levelMult);
 
             if (base.Fact.Active && resource == this.Resource)
             {
@@ -64,7 +64,7 @@ namespace TweakOrTreat
         public BlueprintAbilityResource Resource;
         public BlueprintCharacterClass CharacterClass;
         public int BaseValue;
-        public int levelDiv = 1;
+        public double levelMult = 1;
         public int levelAdjustment = 0;
     }
 
@@ -147,7 +147,7 @@ namespace TweakOrTreat
                         i.CharacterClass = CallOfTheWild.Warpriest.warpriest_class;
                         i.Resource = kiResource;
                         i.levelAdjustment = -3;
-                        i.levelDiv = 2;
+                        i.levelMult = 0.5;
                     }
                 )
             );

@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityModManagerNet;
 
 namespace TweakOrTreat
 {
@@ -64,6 +65,8 @@ namespace TweakOrTreat
                 "A sylvan trickster can select a witch hex in place of a rogue talent. At 10th level, the sylvan trickster can select a hex or major hex in place of a rogue talent. At 18th level, a sylvan trickster can select a hex, major hex, or grand hex in place of a rogue talent. She cannot select any hex more than once.",
                 "", null, FeatureGroup.None);
 
+            //some hex icons are from CotW and not base game
+            CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = UnityModManager.modsPath + @"/CallOfTheWild/Icons/";
             var hexEngine = new CallOfTheWild.HexEngine(new BlueprintCharacterClass[] { rouge }, StatType.Intelligence, archetype: archetype);
             BlueprintFeature healing = hexEngine.createHealing(
                 "SylvanTricksterHealingHex", Witch.healing.Name, Witch.healing.Description,

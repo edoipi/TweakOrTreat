@@ -92,9 +92,9 @@ namespace TweakOrTreat
                 Main.library = self;
                 try
                 {
-                    Main.DebugLog("Loading Teak Or Treat");
+                    Main.DebugLog("Loading Tweak Or Treat");
 
-                    CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/TweakOrTreat/Icons/";
+                    //CallOfTheWild.LoadIcons.Image2Sprite.icons_folder = @"./Mods/TweakOrTreat/Icons/";
 #if DEBUG                
                     bool allow_guid_generation = true;
 #else
