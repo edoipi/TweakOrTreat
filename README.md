@@ -1,4 +1,4 @@
-Requires Call of the Wild and Races Unleashed to run
+Requires Call of the Wild and Races Unleashed to run, optionally Favored Class for some alternate racial traits
 
 Warning: from version 0.2.0 Call of the Wild version required is 1.112. What is more any Wild Stalker that is at least level 4 should be respecced to make rage powers work properly.
 
@@ -8,18 +8,28 @@ Features:
 - Wild Stalker Ranger archetype - ranger with rage
 - Ocean's Echo Oracle archetype - oracle with bardic performance
 - Sylvan Trickter Rogue archetype - rogue with hexes
+- Virtuous Bravo paladin - swashbuckler paladin, requires Derring-Do mod to work
+- Holy Guide paladin - tiny archetype giving favored terrain and teamwork feat for mercies
+- Oath Against Chaos paladin - smite chaos instead of smite evil
+- Myrmidiarch magus - more fighter-like magus
+- Stonelord paladin - defensive dwarven paladin
+- Oath of the People's Council paladin - paladin mixed with bard
 - Alternative racial triats for halfling: fleet of foot
 - Alternative racial traits for human: Awarness, Dual Talent, Giant Ancestry, Heart of the Fey, Military Tradition, Powerful Presence, Unstoppable Magic
+- Alternative racial traits for half-elf: Dual Minded, Multidisciplined(requires Favored Class)
 - Extra Discovery feat
 - Arcane Discovery arcanist exploit
 - Unification of ki between classes
 - Ki pool Rogue Talent(keep in mind it was never made into unchained, so it is questionable if it should be here)
 - Rogue can select Ninja Tricks
+- Arsenal Chaplain gets acces to Advanced Weapon Training - might be overpowered so be careful
+- Extra deities with nice domains: Ragathiel, Tsukiyo and Gruhastha
 optional:
 - move and swift action bardic performance for ocean's echo oracle, sensei monk and evangelist cleric
 - hold weapons in two hands in inventory preview - experimental
 - replace estoc and rapier animation with one handed slashing weapon animation(still bad but in some ways looks better)
 - if holding weapon in one hand with other hand empty, character does not keep the empty hand high in the air
+- advisors use their highest stat instead of the one normally used at their current role(disabled by default)
 Details:
 Mindchemist's Perfect Recall affects both "Knowledge" and "Lore" skills.
 Mindchemist loses first instance of poison resistance instead of poison use that does not exist in this game.
@@ -38,6 +48,12 @@ and the progression was very uneven, so I changed it to be every other level.
 From version 0.2.0 rage resource and rage powers scale with ranger level - 3 as they are supposed to thanks to Holic's fake level implementation.
 Ocean' Echo has no race requirements. Instead of pied piping she gets greater song of discord.
 Sylvan Trickster receives nothing in place of trapfinding(oh well...).
+Virtuous Bravo capstone has only instant kill option implemented.
+Oath Against Chaos has some spells replaced. Additionally he can use Mark of Justice to grant either smite evil or smite chaos, but granting smite evil costs additional lay on hands charges.
+Myrmidiarch gets access to both Advanced Weapon Training and Advanced Armor Training. What is more he can select those options instead of new weapon groups or new armor training just as fighter can. The level 11th ability is replaced by ranged spell combat. He receives extra toggle that changes both spell strike and spell combat between ranged and melee modes.
+Stonelord is not limited to dwarf-only. It always receives full bonuses regardless of contact with ground. I have not implemented ability to take 5-foot step in stance.
+Oath of the People's Council paladin at 11th level gets aura giving straight bonus against all illusion spells.
+
 Arcane Discovery exploit is not accessible for exploiter wizard.
 Unification of ki between classes: it makes it so every monk type, sacred fist warpriest, ninja and rogue with ki pool talent use the same resource, so multiclass characters can use their ki on abilities from any of those classes. When it comes to getting bonus to ki pool from stat you get it from all the stats that your classes allow, but only once per stat. For example monk/ninja will have pool scaling with wisdom and charisma, but scaled fist/ ninja will scale only with charisma bonus and not charisma bonus*2.
 Sensei, evangelist and ocean's echo  get move and swift bardic performance at level 7 and 13, as I believe it should be per pnp rule.
@@ -46,3 +62,4 @@ Credits:
 Holic92 both for Call of the Wild and direct help. This mod capitalizes a lot on Call of the Wild by directly using functions made by Holic and as reference to see how things can be done. Without it it would most likely never have been made.
 Spacehamster for Races Unleashed and tutoring.
 Zappastuff aka ThyWoof for the template project that helped a lot with starting this mod.
+Eddie for Derring-Do mod.

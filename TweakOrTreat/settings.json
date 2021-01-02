@@ -3,5 +3,6 @@
   "two_handed_preview": true,
   "slashing_fencing": true,
   "no_hand_in_the_air": true,
-  "no_two_handed_rapier":  true
+  "no_two_handed_rapier":  true,
+	"advisor_use_max_stat": false
 }

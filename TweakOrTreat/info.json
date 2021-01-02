@@ -2,10 +2,10 @@
   "Id": "TweakOrTreat",
   "DisplayName": "Tweak or Treat",
   "Author": "edoipi",
-  "Version": "0.3.0",
+  "Version": "0.7.1",
   "ManagerVersion": "0.22.9",
   "Requirements": [ "CallOfTheWild", "RacesUnleashed" ],
-  "LoadAfter": ["CallOfTheWild", "RacesUnleashed"],
+  "LoadAfter": ["CallOfTheWild", "RacesUnleashed", "DerringDo"],
   "AssemblyName": "TweakOrTreat.dll",
   "HomePage": "",
   "EntryMethod": "TweakOrTreat.Main.Load"

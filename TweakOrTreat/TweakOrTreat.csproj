@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>$(KINGMAKER_HOME)\Kingmaker_Data\Managed;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\RacesUnleashed</ReferencePath>
+    <ReferencePath>$(KINGMAKER_HOME)\Kingmaker_Data\Managed;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\RacesUnleashed;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\Derring-Do</ReferencePath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony12">
-      <HintPath>0Harmony12.dll</HintPath>
+    <Reference Include="0Harmony">
+      <HintPath>0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
@@ -52,6 +52,10 @@
     </Reference>
     <Reference Include="RacesUnleashed">
       <HintPath>RacesUnleashed.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Derring-Do">
+      <HintPath>Derring-Do.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -116,15 +120,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Advisors.cs" />
     <Compile Include="ArcaneDiscoveryExploit.cs" />
+    <Compile Include="AWT.cs" />
     <Compile Include="BardicPerformance.cs" />
-    <Compile Include="Core.cs" />
+    <Compile Include="Deities.cs" />
     <Compile Include="Estoc.cs" />
     <Compile Include="ExtraDiscovery.cs" />
+    <Compile Include="HalfElf.cs" />
+    <Compile Include="HolyGuide.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Halfling.cs" />
     <Compile Include="Ki.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Myrmidarch.cs" />
+    <Compile Include="OathAgainstChaos.cs" />
+    <Compile Include="OathOfThePeoplesCouncil.cs" />
+    <Compile Include="Stonelord.cs" />
     <Compile Include="SylvanTrickster.cs" />
     <Compile Include="Mindchemist.cs" />
     <Compile Include="MutationWarrior.cs" />
@@ -138,6 +150,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />
+    <Compile Include="VirtuosoBravo.cs" />
     <Compile Include="WildStalker.cs" />
   </ItemGroup>
   <ItemGroup>

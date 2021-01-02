@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace TweakOrTreat
 {
-    [Harmony12.HarmonyPatch(typeof(ItemEntityWeapon), "GetAnimationStyle")]
+    [HarmonyLib.HarmonyPatch(typeof(ItemEntityWeapon), "GetAnimationStyle")]
     class ItemEntityWeapon_GetAnimationStyle_Patch
     {
         static bool Prepare()
@@ -26,7 +26,7 @@ namespace TweakOrTreat
         }
     }
 
-    [Harmony12.HarmonyPatch(typeof(UnitViewHandsEquipment), "get_ActiveOffHandWeaponStyle")]
+    [HarmonyLib.HarmonyPatch(typeof(UnitViewHandsEquipment), "get_ActiveOffHandWeaponStyle")]
     class UnitViewHandsEquipment_ActiveOffHandWeaponStyle_Patch
     {
         static bool Prepare()
@@ -43,7 +43,7 @@ namespace TweakOrTreat
         }
     }
 
-    [Harmony12.HarmonyPatch(typeof(WeaponVisualParameters), "get_AnimStyle")]
+    [HarmonyLib.HarmonyPatch(typeof(WeaponVisualParameters), "get_AnimStyle")]
     class WeaponVisualParameters_get_AnimStyle_Patch
     {
         static bool Prepare()
@@ -60,7 +60,7 @@ namespace TweakOrTreat
         }
     }
 
-    [Harmony12.HarmonyPatch(typeof(BlueprintWeaponType), "get_IsOneHandedWhichCanBeUsedWithTwoHands")]
+    [HarmonyLib.HarmonyPatch(typeof(BlueprintWeaponType), "get_IsOneHandedWhichCanBeUsedWithTwoHands")]
     class BlueprintWeaponType_IsOneHandedWhichCanBeUsedWithTwoHands
     {
         static bool Prepare()

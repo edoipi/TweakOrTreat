@@ -18,22 +18,22 @@ using UnityEngine;
 
 namespace TweakOrTreat
 {
-    //[Harmony12.HarmonyPatch(typeof(UnitDescriptor), "get_OriginalSize")]
-    //class UnitDescriptor_get_OriginalSize_Patch
-    //{
-    //    static void Postfix(ref Size __result, ref UnitDescriptor __instance)
-    //    {
-    //        if(__instance == null)
-    //        {
-    //            return;
-    //        }
+    [HarmonyLib.HarmonyPatch(typeof(UnitDescriptor), "get_OriginalSize")]
+    class UnitDescriptor_get_OriginalSize_Patch
+    {
+        static void Postfix(ref Size __result, ref UnitDescriptor __instance)
+        {
+            if (__instance == null)
+            {
+                return;
+            }
 
-    //        if (__instance.HasFact(Planetouched.smallSize))
-    //        {
-    //            __result = Size.Small;
-    //        }
-    //    }
-    //}
+            if (__instance.HasFact(Planetouched.smallSize))
+            {
+                __result = Size.Small;
+            }
+        }
+    }
 
     //[Harmony12.HarmonyPatch(typeof(Kingmaker.UnitLogic.Class.LevelUp.LevelUpController), "SetupNewCharacher")]
     //class LevelUpController_SetupNewCharacher_Patch
@@ -46,28 +46,39 @@ namespace TweakOrTreat
     //            return;
     //        }
 
-    //        if (preset is BlueprintRaceVisualPresetWithSize)
-    //        {
-    //            var race = __instance?.Unit?.Progression?.Race;
-    //            if (race == null)
-    //            {
-    //                return;
-    //            }
+    //        var sizedPreset = preset as BlueprintRaceVisualPresetWithSize;
 
-    //            if (!Planetouched.raceResizeMap.TryGetValue(race, out BlueprintFeature small)) {
-    //                return;
-    //            }
-                
-    //            __instance.Unit.AddFact(small);
+    //        if (sizedPreset != null)
+    //        {
+    //            __instance.Unit.AddFact(sizedPreset.size);
+    //            __instance.Unit.State.Size = __instance.Unit.OriginalSize;
+    //        }
+    //    }
+    //}
+    //[Harmony12.HarmonyPatch(typeof(Kingmaker.UnitLogic.Class.LevelUp.LevelUpController), "UpdatePreview")]
+    //class LevelUpController_SetupNewCharacher_Patch
+    //{
+    //    static void Postfix(ref Kingmaker.UnitLogic.Class.LevelUp.LevelUpController __instance)
+    //    {
+    //        var preset = __instance?.Doll?.RacePreset;
+    //        if (preset == null)
+    //        {
+    //            return;
+    //        }
+
+    //        var sizedPreset = preset as BlueprintRaceVisualPresetWithSize;
+
+    //        if (sizedPreset != null)
+    //        {
+    //            __instance.Unit.AddFact(sizedPreset.size);
     //            __instance.Unit.State.Size = __instance.Unit.OriginalSize;
     //        }
     //    }
     //}
 
-
     public class BlueprintRaceVisualPresetWithSize : BlueprintRaceVisualPreset
     {
-        public Size size;
+        public BlueprintFeature size;
         public BlueprintRaceVisualPresetWithSize()
         {
 
@@ -93,7 +104,7 @@ namespace TweakOrTreat
                 sizedPreset.RaceId = destRace.RaceId;
                 sizedPreset.MaleSkeleton = src.MaleSkeleton;
                 sizedPreset.FemaleSkeleton = src.FemaleSkeleton;
-                sizedPreset.size = sourceRace.Size;
+                sizedPreset.size = raceResizeMap[destRace];
                 sizedPreset.Skin = skin;
                 sizedPreset.name = destRace.name + sourceRace.name + "Preset" + i;
 
@@ -130,12 +141,6 @@ namespace TweakOrTreat
 
             var races = new BlueprintRace[] { halfling, gnome, halforc, dwarf };
 
-            foreach (var race in races)
-            {
-                addPresets(aasimar, race);
-                addPresets(tiefling, race);
-            }
-
             smallSize = Helpers.CreateFeature("SmallSizeGeneric", "Small Size",
                 "",
                 "", null, FeatureGroup.Racial, new BlueprintComponent[] { });
@@ -144,6 +149,12 @@ namespace TweakOrTreat
 
             makeSmallRace(aasimar);
             makeSmallRace(tiefling);
+
+            foreach (var race in races)
+            {
+                addPresets(aasimar, race);
+                addPresets(tiefling, race);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace TweakOrTreat
 {
-    [Harmony12.HarmonyPatch(typeof(CallOfTheWild.Archetypes.Ninja), "createKiPool")]
+    [HarmonyLib.HarmonyPatch(typeof(CallOfTheWild.Archetypes.Ninja), "createKiPool")]
     class Ninja_createKiPool_Patch
     {
         static bool Prepare()

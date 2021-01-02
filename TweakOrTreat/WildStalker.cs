@@ -3,10 +3,12 @@ using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
 using Kingmaker.Blueprints.Classes.Selection;
+using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Buffs.Blueprints;
+using Kingmaker.UnitLogic.FactLogic;
 using Kingmaker.UnitLogic.Mechanics.Components;
 using System;
 using System.Collections.Generic;
@@ -234,6 +236,7 @@ namespace TweakOrTreat
             var greaterRage = library.Get<BlueprintFeature>("ce49c579fe0bcc647a32c96929fae982");
             var tirelessRage = library.Get<BlueprintFeature>("ca9343d75a83a2745a22fa11c383153a");
             var mightyRage = library.Get<BlueprintFeature>("06a7e5b60020ad947aed107d82d1f897");
+            
 
             archetype.AddFeatures = new LevelEntry[] {
                 //Helpers.LevelEntry(1, rageOfTheWild),

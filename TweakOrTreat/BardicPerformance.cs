@@ -40,6 +40,7 @@ namespace TweakOrTreat
             addFastPerfromance(sensei, "a sensei ");
             addFastPerfromance(evangelist, "an evangelist ");
             addFastPerfromance(oceansEcho, "an ocean’s echo ");
+            addFastPerfromance(OathOfThePeoplesCouncil.archetype, "an oathbound paladin ");
         }
     }
 }
