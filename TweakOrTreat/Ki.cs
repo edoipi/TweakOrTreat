@@ -47,6 +47,30 @@ namespace TweakOrTreat
         }
     }
 
+    //I know what the problem with patching is but I'm too lazy to overcome it properly
+    [HarmonyLib.HarmonyPatch(typeof(CallOfTheWild.SkillUnlocks), "load")]
+    class MonkKiPowers_load_Patch
+    {
+        static bool Prepare()
+        {
+            return true;
+        }
+
+        //replace ki resource that will be used to create ninja talents with monk one and update it where it was already used
+        static void Postfix()
+        {
+            try
+            {
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(typeof(CallOfTheWild.MonkKiPowers).TypeHandle);
+                CallOfTheWild.MonkKiPowers.cha_resource = CallOfTheWild.MonkKiPowers.wis_resource;
+            }
+            catch (Exception e)
+            {
+                Main.logger.Log(String.Format("Error while attempting to patch monk ki powers {0}", e));
+            }
+        }
+    }
+
     public class IncreaseResourcesByClassOnly : OwnedGameLogicComponent<UnitDescriptor>, IResourceAmountBonusHandler, IUnitSubscriber
     {
         public void CalculateMaxResourceAmount(BlueprintAbilityResource resource, ref int bonus)

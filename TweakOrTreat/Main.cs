@@ -156,6 +156,11 @@ namespace TweakOrTreat
                     Stonelord.load();
                     OathOfThePeoplesCouncil.load();
 
+                    Halcyon.load();
+                    AncientLorekeeper.load();
+
+                    //PactWizard.load();
+
                     if (quickerBardicPerformance)
                         BardicPerformance.load();
                     //Planetouched.load();

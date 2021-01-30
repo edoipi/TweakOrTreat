@@ -14,6 +14,8 @@ Features:
 - Myrmidiarch magus - more fighter-like magus
 - Stonelord paladin - defensive dwarven paladin
 - Oath of the People's Council paladin - paladin mixed with bard
+- Halcyon Druid - druid with access to arcane
+- Ancient Lorekeeper Oracle - oracle with arcane spells
 - Alternative racial triats for halfling: fleet of foot
 - Alternative racial traits for human: Awarness, Dual Talent, Giant Ancestry, Heart of the Fey, Military Tradition, Powerful Presence, Unstoppable Magic
 - Alternative racial traits for half-elf: Dual Minded, Multidisciplined(requires Favored Class)
@@ -53,6 +55,8 @@ Oath Against Chaos has some spells replaced. Additionally he can use Mark of Jus
 Myrmidiarch gets access to both Advanced Weapon Training and Advanced Armor Training. What is more he can select those options instead of new weapon groups or new armor training just as fighter can. The level 11th ability is replaced by ranged spell combat. He receives extra toggle that changes both spell strike and spell combat between ranged and melee modes.
 Stonelord is not limited to dwarf-only. It always receives full bonuses regardless of contact with ground. I have not implemented ability to take 5-foot step in stance.
 Oath of the People's Council paladin at 11th level gets aura giving straight bonus against all illusion spells.
+Halcyon Druid at 13th level gets simple single-cast beast shape IV. He has no alginment requirements - I have found mention of this on srd which is weird give flavour.
+Ancient Lorekeeper is not race restricted.
 
 Arcane Discovery exploit is not accessible for exploiter wizard.
 Unification of ki between classes: it makes it so every monk type, sacred fist warpriest, ninja and rogue with ki pool talent use the same resource, so multiclass characters can use their ki on abilities from any of those classes. When it comes to getting bonus to ki pool from stat you get it from all the stats that your classes allow, but only once per stat. For example monk/ninja will have pool scaling with wisdom and charisma, but scaled fist/ ninja will scale only with charisma bonus and not charisma bonus*2.

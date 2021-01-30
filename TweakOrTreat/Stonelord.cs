@@ -263,12 +263,15 @@ namespace TweakOrTreat
                 elementalElder
             };
 
+            var playerFaction = library.Get<BlueprintFaction>("72f240260881111468db610b6c37c099");
+
             foreach (var elemental in elementals)
             {
                 elemental.Alignment = Alignment.LawfulGood;
                 elemental.AddFacts = elemental.AddFacts.AddToArray(CallOfTheWild.Hunter.celestial_template);
                 elemental.AddComponent(Helpers.Create<AllowDyingCondition>());
                 elemental.AddComponent(Helpers.Create<AddResurrectOnRest>());
+                elemental.Faction = playerFaction;
             }
 
             var addElementals = new List<BlueprintFeature>();

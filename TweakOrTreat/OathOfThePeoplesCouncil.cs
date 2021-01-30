@@ -222,6 +222,9 @@ namespace TweakOrTreat
                     group.Features.Add(auraOFTruthFeature);
                 }
             }
+
+            var discordantVocieFeature = library.Get<BlueprintFeature>("8064adc641c74e4cb821ce048ecd83a2");
+            discordantVocieFeature.AddComponent(Common.createPrerequisiteArchetypeLevel(paladin, archetype, 8, any: true));
         }
     }
 }
