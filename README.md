@@ -26,6 +26,7 @@ Features:
 - Rogue can select Ninja Tricks
 - Arsenal Chaplain gets acces to Advanced Weapon Training - might be overpowered so be careful
 - Extra deities with nice domains: Ragathiel, Tsukiyo and Gruhastha
+- Fey Spell Versatility for ranger and hunter
 optional:
 - move and swift action bardic performance for ocean's echo oracle, sensei monk and evangelist cleric
 - hold weapons in two hands in inventory preview - experimental

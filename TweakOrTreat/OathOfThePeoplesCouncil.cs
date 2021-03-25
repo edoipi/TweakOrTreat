@@ -78,7 +78,7 @@ namespace TweakOrTreat
 
             var resScaling = library.Get<BlueprintAbilityResource>("e190ba276831b5c4fa28737e5e49e6a6");
             var amount = Helpers.GetField(resScaling, "m_MaxAmount");
-            BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(amount, "ClassDiv").AddToArray(paladin);
+            BlueprintCharacterClass[] classes = Helpers.GetField<BlueprintCharacterClass[]>(amount, "Class").AddToArray(paladin);
             Helpers.SetField(amount, "Class", classes);
             Helpers.SetField(amount, "Archetypes", new BlueprintArchetype[] { archetype });
             Helpers.SetField(resScaling, "m_MaxAmount", amount);

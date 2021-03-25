@@ -119,17 +119,20 @@ namespace TweakOrTreat
         {
             var kiResource = library.Get<BlueprintAbilityResource>("9d9c90a9a1f52d04799294bf91c80a82");
             var rogue = library.Get<BlueprintCharacterClass>("299aa766dee3cbf4790da4efb8c72484");
+            var paladin = Helpers.GetClass("bfa11238e7ae3544bbeb4d0b92e897ec");
+            //var iroranPaladin = CallOfTheWild.Archetypes.IroranPaladin.archetype;
 
             var amount = Helpers.GetField(kiResource, "m_MaxAmount");
-            var classes = Helpers.GetField<BlueprintCharacterClass[]>(amount, "ClassDiv").AddToArray(rogue);
+            var classes = Helpers.GetField<BlueprintCharacterClass[]>(amount, "ClassDiv").AddToArray(rogue, paladin);
             Helpers.SetField(amount, "ClassDiv", classes);
             Helpers.SetField(amount, "ArchetypesDiv", new BlueprintArchetype[] {
-                CallOfTheWild.Archetypes.Ninja.archetype
+                CallOfTheWild.Archetypes.Ninja.archetype,
+                CallOfTheWild.Archetypes.IroranPaladin.archetype
             });
             Helpers.SetField(amount, "IncreasedByStat", false);
             Helpers.SetField(kiResource, "m_MaxAmount", amount);
 
-            var kiWisdomBonus = Helpers.CreateFeature("KiWisdomBonus", "Ki Poll Wisdom Bonus", "", "", null, FeatureGroup.None,
+            var kiWisdomBonus = Helpers.CreateFeature("KiWisdomBonus", "Ki Pool Wisdom Bonus", "", "", null, FeatureGroup.None,
                 Helpers.Create<IncreaseResourcesByStatOnly>(i =>
                     {
                         i.Stat = StatType.Wisdom;
@@ -140,7 +143,7 @@ namespace TweakOrTreat
             kiWisdomBonus.HideInCharacterSheetAndLevelUp = true;
             kiWisdomBonus.HideInUI = true;
 
-            var kiCharismaBonus = Helpers.CreateFeature("KiCharismaBonus", "Ki Poll Charisma Bonus", "", "", null, FeatureGroup.None,
+            var kiCharismaBonus = Helpers.CreateFeature("KiCharismaBonus", "Ki Pool Charisma Bonus", "", "", null, FeatureGroup.None,
                 Helpers.Create<IncreaseResourcesByStatOnly>(i =>
                     {
                         i.Stat = StatType.Charisma;

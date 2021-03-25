@@ -75,9 +75,6 @@ namespace TweakOrTreat
             try
             {
                 logger = modEntry.Logger;
-                //harmony = Harmony12.HarmonyInstance.Create(modEntry.Info.Id);
-                //Harmony12.HarmonyInstance.DEBUG = true;
-                //harmony.PatchAll(Assembly.GetExecutingAssembly());
 
                 harmony = new HarmonyLib.Harmony(modEntry.Info.Id);
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
@@ -163,6 +160,8 @@ namespace TweakOrTreat
 
                     if (quickerBardicPerformance)
                         BardicPerformance.load();
+
+                    FeySpellVersatility.load();
                     //Planetouched.load();
 
 #if DEBUG

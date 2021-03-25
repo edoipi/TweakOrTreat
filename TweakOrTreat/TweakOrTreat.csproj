@@ -125,9 +125,11 @@
     <Compile Include="ArcaneDiscoveryExploit.cs" />
     <Compile Include="AWT.cs" />
     <Compile Include="BardicPerformance.cs" />
+    <Compile Include="Bullshit.cs" />
     <Compile Include="Deities.cs" />
     <Compile Include="Estoc.cs" />
     <Compile Include="ExtraDiscovery.cs" />
+    <Compile Include="FeySpellVersatility.cs" />
     <Compile Include="Halcyon.cs" />
     <Compile Include="HalfElf.cs" />
     <Compile Include="HolyGuide.cs" />
