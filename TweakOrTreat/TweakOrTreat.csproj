@@ -130,6 +130,7 @@
     <Compile Include="Estoc.cs" />
     <Compile Include="ExtraDiscovery.cs" />
     <Compile Include="FeySpellVersatility.cs" />
+    <Compile Include="FractionalBAB.cs" />
     <Compile Include="Halcyon.cs" />
     <Compile Include="HalfElf.cs" />
     <Compile Include="HolyGuide.cs" />
