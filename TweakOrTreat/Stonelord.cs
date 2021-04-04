@@ -5,6 +5,7 @@ using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Classes.Spells;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Items.Ecnchantments;
+using Kingmaker.Blueprints.Items.Weapons;
 using Kingmaker.Designers.EventConditionActionSystem.Actions;
 using Kingmaker.Designers.Mechanics.Facts;
 using Kingmaker.ElementsSystem;
@@ -13,6 +14,8 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
 using Kingmaker.Items;
 using Kingmaker.Kingdom;
+using Kingmaker.UI.GenericSlot;
+using Kingmaker.UI.ServiceWindow;
 using Kingmaker.UnitLogic;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Abilities.Components;
@@ -163,21 +166,21 @@ namespace TweakOrTreat
                 oldPet.Descriptor.SetMaster(null);
                 oldPet.Destroy();
 
-                var newPet = Owner.Pet;
-                if (newPet != null)
-                {
-                    foreach (var item in items)
-                    {
-                        foreach (var slot in newPet.Body.EquipmentSlots)
-                        {
-                            if (!slot.HasItem && slot.CanInsertItem(item))
-                            {
-                                slot.InsertItem(item);
-                                break;
-                            }
-                        }
-                    }
-                }
+                //var newPet = Owner.Pet;
+                //if (newPet != null)
+                //{
+                //    foreach (var item in items)
+                //    {
+                //        foreach (var slot in newPet.Body.EquipmentSlots)
+                //        {
+                //            if (!slot.HasItem && slot.CanInsertItem(item))
+                //            {
+                //                slot.InsertItem(item);
+                //                break;
+                //            }
+                //        }
+                //    }
+                //}
             }
             
         }
@@ -185,6 +188,89 @@ namespace TweakOrTreat
         // Token: 0x0400587C RID: 22652
         public BlueprintUnitFact old;
         public BlueprintUnitFact update;
+    }
+
+    public class StonelordElementalComponent : BlueprintComponent
+    {
+
+    }
+
+    //[HarmonyLib.HarmonyPatch(typeof(CharDollBase), "SetupInfo")]
+    [HarmonyLib.HarmonyPatch(typeof(CharDollBase), nameof(CharDollBase.SetupInfo))]
+    [HarmonyLib.HarmonyBefore("CallOfTheWild")]
+    class Game_PauseBind_Patch
+    {
+        static bool Prepare()
+        {
+            return true;
+        }
+
+        static EquipSlotBase.SlotType[] bannedSlots = new EquipSlotBase.SlotType[] {
+            EquipSlotBase.SlotType.PrimaryHand,
+            EquipSlotBase.SlotType.SecondaryHand,
+            EquipSlotBase.SlotType.Feet
+        };
+
+        static void dewIt(CharDollBase __instance, UnitEntityData player)
+        {
+            __instance.CurrentUnit = player;
+            if (__instance.CurrentUnit == null)
+            {
+                return;
+            }
+            foreach (EquipSlotBase equipSlotBase in __instance.SlotList)
+            {
+                equipSlotBase.Clear();
+                equipSlotBase.SetupInfo(player.Body);
+
+                if (bannedSlots.Contains(equipSlotBase.Type))
+                {
+                    if (!equipSlotBase.Slot.Lock)
+                    {
+                        equipSlotBase.Slot.Lock.Retain();
+                    }
+                    if (!equipSlotBase.HasItem)
+                    {
+                        equipSlotBase.ItemImage.color = new UnityEngine.Color(1.0f, 1.0f, 1.0f, 0.3f);
+                    }
+                }
+                else
+                {
+                    if (equipSlotBase.Slot.Lock)
+                    {
+                        equipSlotBase.Slot.Lock.Release();
+                    }
+                }
+            }
+            if (__instance.Room != null)
+            {
+                __instance.Room.SetupInfo(player);
+            }
+            if (__instance.DollWeaponSets != null)
+            {
+                for (int i = 1; i < player.Body.HandsEquipmentSets.Count; i++)
+                {
+                    if (player.Body.HandsEquipmentSets[i].PrimaryHand?.MaybeItem != player.Body.HandsEquipmentSets[0].PrimaryHand?.MaybeItem
+                        || player.Body.HandsEquipmentSets[i].SecondaryHand?.MaybeItem != player.Body.HandsEquipmentSets[0].SecondaryHand?.MaybeItem)
+                    {
+                        player.Body.HandsEquipmentSets[i] = player.Body.HandsEquipmentSets[0].CloneObject();
+                    }
+
+                }
+                __instance.DollWeaponSets.SetupInfo(player);
+            }
+        }
+
+        static bool Prefix(CharDollBase __instance, UnitEntityData player)
+        {
+            if (player.Blueprint.GetComponent<StonelordElementalComponent>() != null)
+            {
+                dewIt(__instance, player);
+                return false;
+            }
+
+            return true;
+        }
     }
 
     class Stonelord
@@ -254,6 +340,8 @@ namespace TweakOrTreat
             var elementalGreater = library.CopyAndAdd<BlueprintUnit>("55f39411dc3c9ef43aa61c2d7fe3bfc9", "StonelordElementalGreater", "");
             var elementalElder = library.CopyAndAdd<BlueprintUnit>("672433d2f2e99764db2eadc6f595a2ba", "StonelordElementalElder", "");
 
+            var emptyHand = library.Get<BlueprintItemWeapon>("20375b5a0c9243d45966bd72c690ab74");
+
             var elementals = new BlueprintUnit[]{
                 elementalSmall,
                 elementalMedium,
@@ -263,15 +351,117 @@ namespace TweakOrTreat
                 elementalElder
             };
 
+            var bullRush = library.Get<BlueprintFeature>("b3614622866fe7046b787a548bbd7f59");
+            var bullGreaterRush = library.Get<BlueprintFeature>("72ba6ad46d94ecd41bad8e64739ea392");
+            var cleave = library.Get<BlueprintFeature>("d809b6c4ff2aaff4fa70d712a70f7d7b");
+            //overrun? maybe it can work
+
+            var powerAttack = library.Get<BlueprintFeature>("9972f33f977fc724c838e59641b2fca5");
+            //var overrunAbilityOld = library.CopyAndAdd<BlueprintAbility>("1a3b471ecea51f7439a946b23577fd70", "OverrunNotTrampleAbilityOld", "");
+            var overrunAbility = library.CopyAndAdd<BlueprintAbility>("1a3b471ecea51f7439a946b23577fd70", "OverrunNotTrampleAbility", "");
+            //overrunAbility.ReplaceComponent<AbilityCustomOverrun>(
+            //    a => {
+            //        a.FirstTargetOnly = true;
+            //        //a.StopOnCorpulence = true;
+            //    }
+            //);
+
+            //overrunAbility.ReplaceComponent<AbilityCustomOverrun>(
+            //    new TweakOrTreat.MyOverrun()
+            //);
+
+            overrunAbility.RemoveComponents<AbilityCustomOverrun>();
+            overrunAbility.AddComponent(
+                Helpers.Create<MyOverrun>(
+                    o =>
+                    {
+                        o.Actions = Helpers.CreateActionList();
+                        
+                    }
+                )
+            );
+            overrunAbility.SetNameDescription(
+                "Overrun",
+                "You can attempt to run over your target, trampling them underfoot.\nIf your maneuver is successful, you will move through the target's space. If your attack exceeds your opponent's CMD by 5 or more, you move through the target's space and the target is knocked prone.\nIf your attempt fails, you halt in the space directly in front of the opponent, or the nearest unoccupied space in front of the target."
+            );
+            overrunAbility.LocalizedSavingThrow = Helpers.savingThrowNone;
+
+            var overrunFeature = Helpers.CreateFeature(
+                "ImprovedOverrunFeature",
+                "Improved Overrun",
+                "You do not provoke an attack of opportunity when performing an overrun combat maneuver. In addition, you receive a +2 bonus on checks made to overrun a foe. You also receive a +2 bonus to your Combat Maneuver Defense whenever an opponent tries to overrun you. Targets of your overrun attempt may not chose to avoid you.",
+                "",
+                overrunAbility.Icon,
+                FeatureGroup.Feat,
+               // overrunAbilityOld.CreateAddFact(),
+                overrunAbility.CreateAddFact(),
+                Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
+                Common.createManeuverDefenseBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
+                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Strength, 13),
+                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.BaseAttackBonus, 1),
+                powerAttack.PrerequisiteFeature()
+            );
+
+            var greaterOverrunFeature = Helpers.CreateFeature(
+                "GreaterOverrunFeature",
+                "Greater Overrun",
+                "You receive a +2 bonus on checks made to overrun a foe. This bonus stacks with the bonus granted by Improved Overrun. Whenever you overrun opponents, they provoke attacks of opportunity if they are knocked prone by your overrun.",
+                "",
+                overrunAbility.Icon,
+                FeatureGroup.Feat,
+                Helpers.Create<ManeuverProvokeAttack>(m => m.ManeuverType = Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun),
+                Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
+                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Strength, 13),
+                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.BaseAttackBonus, 6),
+                powerAttack.PrerequisiteFeature(),
+                overrunFeature.PrerequisiteFeature()
+            );
+
+            var missingFeatures = new List<BlueprintFeature>[] {
+                new List<BlueprintFeature>(){ bullRush }, //elementalSmall,
+                new List<BlueprintFeature>(){ cleave }, //elementalMedium,
+                new List<BlueprintFeature>(){ bullGreaterRush, overrunFeature }, //elementalLarge,
+                new List<BlueprintFeature>(){ }, //elementalHuge,
+                new List<BlueprintFeature>(){ greaterOverrunFeature }, //elementalGreater,
+                new List<BlueprintFeature>(){ }  //elementalElder
+            };
+
             var playerFaction = library.Get<BlueprintFaction>("72f240260881111468db610b6c37c099");
 
-            foreach (var elemental in elementals)
+            foreach (var (i, elemental) in elementals.WithIndex())
             {
                 elemental.Alignment = Alignment.LawfulGood;
                 elemental.AddFacts = elemental.AddFacts.AddToArray(CallOfTheWild.Hunter.celestial_template);
                 elemental.AddComponent(Helpers.Create<AllowDyingCondition>());
                 elemental.AddComponent(Helpers.Create<AddResurrectOnRest>());
                 elemental.Faction = playerFaction;
+                elemental.AddComponent(Helpers.Create<StonelordElementalComponent>());
+
+                var slams = new LinkedList<BlueprintItemWeapon>(elemental.Body.AdditionalLimbs);
+
+                if (slams.Count > 0)
+                {
+                    elemental.Body.PrimaryHand = slams.First();
+                    slams.RemoveFirst();
+                }
+                if (slams.Count > 0)
+                {
+                    elemental.Body.SecondaryHand = slams.First();
+                    slams.RemoveFirst();
+                }
+
+                elemental.Body.AdditionalLimbs = slams.ToArray();
+                elemental.Body.EmptyHandWeapon = emptyHand;
+                elemental.Body.DisableHands = false;
+
+                for(int j=0; j <= i; j++)
+                {
+                    var features = missingFeatures[j];
+                    foreach(var f in features)
+                    {
+                        elemental.AddFacts = elemental.AddFacts.AddToArray(f);
+                    }
+                }
             }
 
             var addElementals = new List<BlueprintFeature>();

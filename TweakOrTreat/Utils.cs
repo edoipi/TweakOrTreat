@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
+using Kingmaker.Blueprints.Classes.Selection;
 using Kingmaker.Blueprints.Facts;
 using Kingmaker.Blueprints.Root.Strings;
 using Kingmaker.Designers.Mechanics.Facts;
@@ -21,6 +22,10 @@ namespace TweakOrTreat
 {
     static class Utils
     {
+        public static IEnumerable<(int index, T item)> WithIndex<T>(this IEnumerable<T> source)
+        {
+            return source.Select((item, index) => (index, item));
+        }
         public static int GetArchetypeLevel(UnitDescriptor unit, BlueprintCharacterClass clazz, BlueprintArchetype archetype)
         {
             int num = 0;
@@ -63,6 +68,17 @@ namespace TweakOrTreat
             }
 
             return Helpers.CreateFeature(name, displayName, description, guid, icon, group, list.ToArray());
+        }
+
+        public static BlueprintFeatureSelection CreateFeatureSelection(string name, string displayName, string description, string guid, Sprite icon, FeatureGroup group, params BlueprintComponent[][] components)
+        {
+            List<BlueprintComponent> list = new List<BlueprintComponent>();
+            foreach (var componentArray in components)
+            {
+                list.AddRange(componentArray);
+            }
+
+            return Helpers.CreateFeatureSelection(name, displayName, description, guid, icon, group, list.ToArray());
         }
 
         public static ActionList ReplaceAction<T>(this ActionList oldActions, Action<T> lambda) where T : GameAction

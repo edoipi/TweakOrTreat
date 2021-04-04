@@ -1,0 +1,49 @@
+done:
+
+aasimar:
+- crusading magic
+
+human:
+- adoptive parentage
+- eye for talent
+
+elf:
+- moonkissed,
+- human raised
+- illustriousUrbanite
+- overwhelmingMagic
+- longLimbed
+
+dwarf:
+- iron citizen
+- magic resistant
+- unstoppable 
+- wanderer
+
+- iron within
+
+halfling:
+- caretaker
+
+half elf:
+- Weapon Familiarity
+- Drow-Trained
+
+half orc:
+- shamans apprentice
+- burning assurance
+
+- Fey Thoughts
+
+todo:
+
+dwarf:
+
+half orc:
+
+
+half-elf:
+- kindred raised 
+
+
+

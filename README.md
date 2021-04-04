@@ -16,9 +16,16 @@ Features:
 - Oath of the People's Council paladin - paladin mixed with bard
 - Halcyon Druid - druid with access to arcane
 - Ancient Lorekeeper Oracle - oracle with arcane spells
-- Alternative racial triats for halfling: fleet of foot
-- Alternative racial traits for human: Awarness, Dual Talent, Giant Ancestry, Heart of the Fey, Military Tradition, Powerful Presence, Unstoppable Magic
-- Alternative racial traits for half-elf: Dual Minded, Multidisciplined(requires Favored Class)
+- Alternative racial traits:  
+	* aasimar: Crusading Magic
+	* elf: Moonkissed, Human Raised, Illustrious Urbanite, Overwhelming Magic, Long Limbed, Fey Thoughts, Dreamspeaker
+	* dwarf: Iron Within, traits ported from Races Unleashed: Iron Citizen, Magic Resistant, Unstoppable, Wanderer
+	* halfling: Fleet of Foot, Caretaker, Fey Thoughts
+	* human: Awarness, Dual Talent, Giant Ancestry, Heart of the Fey, Military Tradition, Powerful Presence, Unstoppable Magic, Adoptive Parentage, Eye for Talent, Focused Study
+	* half-elf: Dual Minded, Weapon Familiarity, Drow-Trained, Spell Resistance, Multidisciplined(requires Favored Class), Fey Thoughts(requires Favored Class)
+	* half orc: Shamans Apprentice, Burning Assurance, Shaman Enhancement, Projection
+
+- Fey Thoughts
 - Extra Discovery feat
 - Arcane Discovery arcanist exploit
 - Unification of ki between classes
@@ -33,6 +40,7 @@ optional:
 - replace estoc and rapier animation with one handed slashing weapon animation(still bad but in some ways looks better)
 - if holding weapon in one hand with other hand empty, character does not keep the empty hand high in the air
 - advisors use their highest stat instead of the one normally used at their current role(disabled by default)
+
 Details:
 Mindchemist's Perfect Recall affects both "Knowledge" and "Lore" skills.
 Mindchemist loses first instance of poison resistance instead of poison use that does not exist in this game.

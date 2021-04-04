@@ -124,6 +124,11 @@ namespace TweakOrTreat
 #endif
                     CallOfTheWild.Helpers.GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
 
+                    //Bullshit.load();
+
+                    WeaponFamiliarity.load();
+                    UniversalRacialTraits.load();
+
                     OceansEcho.load();
 
                     
@@ -162,6 +167,9 @@ namespace TweakOrTreat
                         BardicPerformance.load();
 
                     FeySpellVersatility.load();
+                    Aaasimar.load();
+                    Elf.load();
+                    Dwarf.load();
                     //Planetouched.load();
 
 #if DEBUG
@@ -206,7 +214,7 @@ namespace TweakOrTreat
 
                     HalfElf.load();
 
-
+                    HalfOrc.load();
 #if DEBUG
                     
                     CallOfTheWild.Helpers.GuidStorage.dump(guid_file_name);

@@ -58,6 +58,7 @@ namespace TweakOrTreat
                                                             Helpers.Create<CallOfTheWild.NewMechanics.addSpellChoice>(a => { a.spell_book = ranger.Spellbook; a.spell_level = 3; a.spell_list = combined_spell_list; }),
                                                             Helpers.Create<CallOfTheWild.NewMechanics.addSpellChoice>(a => { a.spell_book = ranger.Spellbook; a.spell_level = 4; a.spell_list = combined_spell_list; }),
                                                             Helpers.PrerequisiteStatValue(StatType.Charisma, 13),
+                                                            Helpers.PrerequisiteStatValue(StatType.SkillKnowledgeArcana, 1),
                                                             Common.createPrerequisiteClassSpellLevel(ranger, 1)
                                                             );
 

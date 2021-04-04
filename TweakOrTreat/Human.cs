@@ -113,7 +113,18 @@ namespace TweakOrTreat
                 var levelUp = Game.Instance.UI.CharacterBuildController.LevelUpController;
                 if (Owner == levelUp.Preview || Owner == levelUp.Unit)
                 {
+                    //levelUp.State.Selections.RemoveAll(s => s.Selection == selection);
+                    //typeof(LevelUpController).GetMethod("UpdatePreview", BindingFlags.NonPublic | BindingFlags.Instance)
+                    //    .Invoke(levelUp, new object[] { });
+                    typeof(LevelUpController).GetMethod("RemoveAction", BindingFlags.NonPublic | BindingFlags.Instance)
+                        .MakeGenericMethod(typeof(SelectFeature))
+                        .Invoke(levelUp, new object[] { (Predicate<SelectFeature>)((SelectFeature a) => a.Selection == selection) });
                     levelUp.State.Selections.RemoveAll(s => s.Selection == selection);
+                    //typeof(LevelUpController).GetMethod("UpdatePreview", BindingFlags.NonPublic | BindingFlags.Instance)
+                    //    .Invoke(levelUp, new object[] { });
+                    levelUp.State.Selections.RemoveAll(s => s.Selection == selection);
+                    typeof(LevelUpController).GetMethod("UpdatePreview", BindingFlags.NonPublic | BindingFlags.Instance)
+                        .Invoke(levelUp, new object[] { });
                 }
             }
             catch (Exception e)
@@ -125,6 +136,35 @@ namespace TweakOrTreat
 
     class Human
     {
+        public static BlueprintFeature[] makeAnimalBonusFeatures(string fname, string fName, string desc, IEnumerable<StatType> stats)
+        {
+            var eyeForTalentFeatures = new List<BlueprintFeature>();
+            foreach (var stat in stats)
+            {
+                var name = Enum.GetName(typeof(StatType), stat);
+                var blank = '\u200B';
+                var space = "";
+                for (int i = 0; i < (int)stat; i++)
+                {
+                    space += blank;
+                }
+                var bonus = Common.createAddFeatComponentsToAnimalCompanion(name + fname + "CompanionFeature", stat.CreateAddStatBonus(2, ModifierDescriptor.UntypedStackable));
+                bonus.Feature.HideInUI = false;
+                bonus.Feature.HideInCharacterSheetAndLevelUp = false;
+                bonus.Feature.SetName($"{fName}: " + space + name + " Bonus");
+                bonus.Feature.SetDescription(desc);
+                var feature = Helpers.CreateFeature(name + fname + "Feature", $"{fName}: " + space + name + " Bonus",
+                    desc,
+                    "", null, FeatureGroup.Domain,
+                    bonus
+                //stat.CreateAddStatBonus(2, ModifierDescriptor.Racial)
+                );
+                feature.ReapplyOnLevelUp = true;
+                eyeForTalentFeatures.Add(feature);
+            }
+
+            return eyeForTalentFeatures.ToArray();
+        }
         static LibraryScriptableObject library => Main.library;
         static internal void load()
         {
@@ -304,21 +344,51 @@ namespace TweakOrTreat
             unstoppableMagic.SetName("Unstoppable Magic");
             unstoppableMagic.SetDescription("Humans from civilizations built upon advanced magic, such as Geb or Nex, are educated in a variety of ways to accomplish their magical goals. They gain a +2 racial bonus on caster level checks against spell resistance. This racial trait replaces the bonus feat trait.");
 
-            //var elvenWeapons = library.Get<BlueprintFeature>("03fd1e043fc678a4baf73fe67c3780ce");
-            //var dwarvenWeapons = library.Get<BlueprintFeature>("a1619e8d27fe97c40ba443f6f8ab1763");
-            //var orcWeapons = library.Get<BlueprintFeature>("6ab6c271d1558344cbc746350243d17d");
-            //var drowWeapons = library.Get<BlueprintFeature>("10d0be4122534a9eb41173e88b3e8cc7");
-            //var adoptiveParentage = Helpers.CreateFeatureSelection("AdoptiveParentage", "Adoptive Parentage",
-            //    "Humans are sometimes orphaned and adopted by other races. Choose one humanoid race without the human subtype. You start play with that race’s weapon familiarity racial trait. This racial trait replaces the bonus feat trait.",
-            //    "", null, FeatureGroup.Racial,
-            //    bonusFeatComponents
-            //);
-            //adoptiveParentage.AllFeatures = adoptiveParentage.AllFeatures.AddToArray(
-            //    elvenWeapons,
-            //    dwarvenWeapons,
-            //    orcWeapons,
-            //    drowWeapons
-            //);
+            var elvenWeapons = library.Get<BlueprintFeature>("03fd1e043fc678a4baf73fe67c3780ce");
+            var dwarvenWeapons = library.Get<BlueprintFeature>("a1619e8d27fe97c40ba443f6f8ab1763");
+            var orcWeapons = library.Get<BlueprintFeature>("6ab6c271d1558344cbc746350243d17d");
+            var drowWeapons = library.Get<BlueprintFeature>("10d0be4122534a9eb41173e88b3e8cc7");
+            var adoptiveParentage = Helpers.CreateFeatureSelection("AdoptiveParentage", "Adoptive Parentage",
+                "Humans are sometimes orphaned and adopted by other races. Choose one humanoid race without the human subtype. You start play with that race’s weapon familiarity racial trait. This racial trait replaces the bonus feat trait.",
+                "", null, FeatureGroup.Racial,
+                bonusFeatComponents
+            );
+            adoptiveParentage.AllFeatures = adoptiveParentage.AllFeatures.AddToArray(
+                elvenWeapons,
+                dwarvenWeapons,
+                orcWeapons,
+                drowWeapons,
+                WeaponFamiliarity.halflingWeaponFamiliarity,
+                WeaponFamiliarity.gnomeWeaponFamiliarity
+            );
+
+            var eyeForTalent = Utils.CreateFeatureSelection("EyeForTalentFeatureSelection", "Eye for Talent",
+                "Humans have great intuition for hidden potential. They gain a +2 racial bonus on Perception checks. In addition, when they acquire an animal companion, bonded mount, cohort, or familiar, that creature gains a +2 bonus to one ability score of the character’s choice.",
+                "", null, FeatureGroup.Racial,
+                bonusFeatComponents,
+                new BlueprintComponent[]
+                {
+                    Helpers.CreateAddStatBonus(Kingmaker.EntitySystem.Stats.StatType.SkillPerception, 2, Kingmaker.Enums.ModifierDescriptor.Racial)
+                }
+            );
+            eyeForTalent.ReapplyOnLevelUp = true;
+            eyeForTalent.AllFeatures = makeAnimalBonusFeatures("EyeForTalent", eyeForTalent.Name, eyeForTalent.Description, StatTypeHelper.Attributes);
+
+            var skillFocus = library.Get<BlueprintFeature>("c9629ef9eebb88b479b2fbc5e836656a");
+            var focusedStudy = Helpers.CreateProgression(
+                "FocusedStudyFeatureProgression",
+                "Focused Study",
+                "All humans are skillful, but some, rather than being generalists, tend to specialize in a handful of skills. At 1st, 8th, and 16th level, such humans gain Skill Focus in a skill of their choice as a bonus feat.",
+                "",
+                skillFocus.Icon,
+                FeatureGroup.AasimarHeritage
+            );
+            focusedStudy.AddComponents(bonusFeatComponents);
+            focusedStudy.LevelEntries = new LevelEntry[] {
+                Helpers.LevelEntry(1, skillFocus),
+                Helpers.LevelEntry(8, skillFocus),
+                Helpers.LevelEntry(16, skillFocus),
+            };
 
             RacesUnleashed.RacialTraits.AddAlternativeRacialTraitsSelection(human, 2, new List<BlueprintFeature>() {
                 dualTalent,
@@ -328,7 +398,9 @@ namespace TweakOrTreat
                 heartOfTheFey,
                 powerfulPresence,
                 unstoppableMagic,
-                //adoptiveParentage
+                adoptiveParentage,
+                eyeForTalent,
+                focusedStudy
             });
         }
     }
