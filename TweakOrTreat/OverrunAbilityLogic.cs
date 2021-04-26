@@ -20,10 +20,11 @@ using Kingmaker.View;
 using Kingmaker.Visual.Animation.Kingmaker;
 using Pathfinding;
 using UnityEngine;
+using static TweakOrTreat.Overrun;
 
 namespace TweakOrTreat
 {
-    public class MyOverrun : AbilityCustomOverrun
+    public class OverrunAbilityLogic : AbilityCustomOverrun
     {
         void logStatus(UnitCombatState user, UnitEntityData target)
         {
@@ -72,6 +73,15 @@ namespace TweakOrTreat
             caster.View.StopMoving();
             caster.View.AgentASP.AvoidanceDisabled = true;
             caster.View.AgentASP.MaxSpeedOverride = new float?(caster.CombatSpeedMps * 2f);
+
+
+            //UnitAnimationManager animationManager0 = caster.View.AnimationManager;
+            //if (animationManager0 != null)
+            //{
+            //    animationManager0.ExecuteIfIdle(UnitAnimationType.);
+            //}
+
+
             caster.View.AgentASP.ForcePath(new ForcedPath(new List<Vector3>
             {
                 startPoint,
@@ -90,17 +100,18 @@ namespace TweakOrTreat
             HashSet<UnitEntityData> overrunUnits = new HashSet<UnitEntityData>();
             float passedDistance = 0f;
             Vector2 dir = (endPoint - startPoint).normalized.To2D();
-            Main.logger.Log($"dir: {dir}");
+            //Main.logger.Log($"dir: {dir}");
+            var canOverunMultiple = caster.Ensure<OverrunUnitPart>().canOverrunMultipleTargets();
             while (caster.View.MovementAgent.IsReallyMoving)
             {
                 if (Game.Instance.TurnBasedCombatController.WaitingForUI)
                 {
                     yield return null;
                 }
-                bool flag = false;
+                bool fail = false;
                 //if (!this.FirstTargetOnly || overrunUnits.Count <= 0)
                 //{
-                Main.logger.Log($"count: {overrunUnits.Count}");
+                //Main.logger.Log($"count: {overrunUnits.Count}");
                 foreach (UnitEntityData unitEntityData in Game.Instance.State.Units)
                 {
                     float magnitude = (unitEntityData.Position - caster.Position).magnitude;
@@ -111,55 +122,63 @@ namespace TweakOrTreat
                         if (Mathf.Abs(Vector2.SignedAngle(dir, to)) <= 45f)
                         {
 
-                            bool flag2 = false;
-                            if (overrunUnits.Count <= 0)
-                            {
-                                if (!this.AutoSuccess)
+                            bool partial = false;
+                            //if (!caster.IsAlly(unitEntityData))
+                            //{
+                                if (overrunUnits.Count <= 0 || canOverunMultiple)
                                 {
-                                    caster.View.StopMoving();
-                                    yield return null;
-                                    logStatus(caster.CombatState, unitEntityData);
-                                    //Game.Instance.CombatEngagementController.ForceAttackOfOpportunity(caster, unitEntityData);
-
-                                    //caster.Commands.Run(new UnitAttackOfOpportunity(unitEntityData));
-                                    //EventBus.RaiseEvent<IAttackOfOpportunityHandler>(delegate (IAttackOfOpportunityHandler h)
-                                    //{
-                                    //    h.HandleAttackOfOpportunity(caster, unitEntityData);
-                                    //});
-                                    //yield return null;
-                                    RuleCombatManeuver ruleCombatManeuver = context.TriggerRule<RuleCombatManeuver>(new RuleCombatManeuver(caster, unitEntityData, CombatManeuver.Overrun));
-                                    //yield return null;
-                                    flag = !ruleCombatManeuver.Success;
-                                    flag2 = ruleCombatManeuver.IsPartialSuccess;
-
-                                    yield return null;
-
-                                    caster.View.AgentASP.ForcePath(new ForcedPath(new List<Vector3>
+                                    if (!caster.IsAlly(unitEntityData))
                                     {
-                                        caster.Position,
-                                        endPoint
-                                    }), 1000000f);
+                                        caster.View.StopMoving();
+                                        UnitAnimationManager animationManager = unitEntityData.View.AnimationManager;
+                                        if (animationManager != null)
+                                        {
+                                            animationManager.ExecuteIfIdle(UnitAnimationType.Hit);
+                                        }
+                                        yield return null;
+                                        var cmRule = new RuleCombatManeuver(caster, unitEntityData, CombatManeuver.Overrun);
+                                        cmRule.AddBonus(-2 * overrunUnits.Count, null);
+                                        RuleCombatManeuver ruleCombatManeuver = context.TriggerRule<RuleCombatManeuver>(cmRule);
+                                        //yield return null;
+                                        fail = !ruleCombatManeuver.Success;
+                                        partial = ruleCombatManeuver.IsPartialSuccess;
+                                        
+                                        yield return null;
+
+                                        caster.View.AgentASP.ForcePath(new ForcedPath(new List<Vector3>
+                                        {
+                                            caster.Position,
+                                            endPoint
+                                        }), 1000000f);
+                                    }
+                                    else
+                                    {
+                                        partial = true;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                flag = true;
-                            }
-                            Main.logger.Log($"after flag calulation");
-                            Main.logger.Log($"flag: {flag} flag2: {flag2}");
-                            if (flag2)
+                                else
+                                {
+                                    fail = true;
+                                }
+                            //} else
+                            //{
+                            //    partial = true;
+                            //}
+                            //Main.logger.Log($"after flag calulation");
+                            //Main.logger.Log($"flag: {flag} flag2: {flag2}");
+                            if (partial)
                             {
                                 UnitAnimationManager animationManager = unitEntityData.View.AnimationManager;
                                 if (animationManager != null)
                                 {
-                                    animationManager.ExecuteIfIdle(UnitAnimationType.Dodge);
+                                    animationManager.Execute(UnitAnimationType.Dodge);
                                 }
                             }
-                            if (flag)
+
+                            if (fail)
                             {
-                                Main.logger.Log($"running cause flag: {flag}");
+                                //Main.logger.Log($"running cause flag: {flag}");
                                 UnitAnimationManager animationManager2 = unitEntityData.View.AnimationManager;
-                                Main.logger.Log($"animationManager2 is null: {animationManager2 == null}");
                                 if (animationManager2 == null)
                                 {
                                     break;
@@ -169,31 +188,31 @@ namespace TweakOrTreat
                             }
                             else
                             {
-                                Main.logger.Log($"running cause flag: {flag}");
+                                //Main.logger.Log($"running cause flag: {flag}");
                                 overrunUnits.Add(unitEntityData);
-                                Main.logger.Log($"count of overrun: {overrunUnits.Count}");
+                                //Main.logger.Log($"count of overrun: {overrunUnits.Count}");
                                 using (context.GetDataScope(unitEntityData))
                                 {
                                     this.Actions.Run();
                                 }
-                                Main.logger.Log($"after action.run()");
+                                //Main.logger.Log($"after action.run()");
                             }
                         }
                     }
                 }
                 //}
                 passedDistance += (caster.Position - caster.PreviousPosition).magnitude;
-                Main.logger.Log($"passed distance: {passedDistance}");
-                Main.logger.Log($"max distance: {maxDistance}");
-                Main.logger.Log($"flag: {flag}");
-                if (passedDistance >= maxDistance || flag)
+                //Main.logger.Log($"passed distance: {passedDistance}");
+                //Main.logger.Log($"max distance: {maxDistance}");
+                //Main.logger.Log($"flag: {flag}");
+                if (passedDistance >= maxDistance || fail)
                 {
                     caster.View.StopMoving();
                     break;
                 }
                 yield return null;
             }
-            Main.logger.Log($"out of while");
+            //Main.logger.Log($"out of while");
             if (this.AddBuffWhileRunning)
             {
                 context.Caster.Descriptor.RemoveFact(this.AddBuffWhileRunning);
@@ -219,49 +238,49 @@ namespace TweakOrTreat
         }
 
         // Token: 0x06002BE3 RID: 11235 RVA: 0x000B1F94 File Offset: 0x000B0194
-        public float GetMinRangeMeters(UnitEntityData caster)
+        new public float GetMinRangeMeters(UnitEntityData caster)
         {
             return 10.Feet().Meters + caster.View.Corpulence;
         }
 
         // Token: 0x06002BE4 RID: 11236 RVA: 0x000B1915 File Offset: 0x000AFB15
-        private static float GetMaxRangeMeters(UnitEntityData caster)
+        new private static float GetMaxRangeMeters(UnitEntityData caster)
         {
             return caster.CombatSpeedMps * 6f;
         }
 
         // Token: 0x06002BE5 RID: 11237 RVA: 0x000B1FBC File Offset: 0x000B01BC
-        public bool CanTarget(UnitEntityData caster, TargetWrapper target)
+        new public bool CanTarget(UnitEntityData caster, TargetWrapper target)
         {
             //Main.logger.Log($"calculating magnitude");
             float magnitude = (target.Point - caster.Position).magnitude;
             //Main.logger.Log($"magnitude: {magnitude}");
-            var ret = ((magnitude <= MyOverrun.GetMaxRangeMeters(caster) && magnitude >= this.GetMinRangeMeters(caster)) || this.AutoSuccess) && ObstacleAnalyzer.TraceAlongNavmesh(caster.Position, target.Point) == target.Point;
+            var ret = ((magnitude <= OverrunAbilityLogic.GetMaxRangeMeters(caster) && magnitude >= this.GetMinRangeMeters(caster)) || this.AutoSuccess) && ObstacleAnalyzer.TraceAlongNavmesh(caster.Position, target.Point) == target.Point;
             //Main.logger.Log($"ret: {ret}");
             return ret;
         }
 
         // Token: 0x04001CAE RID: 7342
-        public BlueprintBuff AddBuffWhileRunning;
+        new public BlueprintBuff AddBuffWhileRunning;
 
         // Token: 0x04001CAF RID: 7343
         [Tooltip("Use delays to accomodate starting and finishing animations like takeoff/landing")]
-        public float DelayBeforeStart;
+        new public float DelayBeforeStart;
 
         // Token: 0x04001CB0 RID: 7344
         [Tooltip("Use delays to accomodate starting and finishing animations like takeoff/landing")]
-        public float DelayAfterFinish;
+        new public float DelayAfterFinish;
 
         // Token: 0x04001CB1 RID: 7345
-        public bool FirstTargetOnly;
+        new public bool FirstTargetOnly;
 
         // Token: 0x04001CB2 RID: 7346
-        public bool AutoSuccess;
+        new public bool AutoSuccess;
 
         // Token: 0x04001CB3 RID: 7347
-        public bool StopOnCorpulence;
+        new public bool StopOnCorpulence;
 
         // Token: 0x04001CB4 RID: 7348
-        public ActionList Actions;
+        new public ActionList Actions;
     }
 }

@@ -4,5 +4,7 @@
   "slashing_fencing": true,
   "no_hand_in_the_air": true,
   "no_two_handed_rapier":  true,
-	"advisor_use_max_stat": false
+	"advisor_use_max_stat": false,
+	"spell_slots_from_permanent_bonus_only": true,
+	"reduce_spell_slots_from_ability_drain": true
 }

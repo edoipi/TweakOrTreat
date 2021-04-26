@@ -14,6 +14,9 @@ using Kingmaker.EntitySystem.Stats;
 using Kingmaker.Enums;
 using Kingmaker.Items;
 using Kingmaker.Kingdom;
+using Kingmaker.RuleSystem;
+using Kingmaker.RuleSystem.Rules;
+using Kingmaker.RuleSystem.Rules.Damage;
 using Kingmaker.UI.GenericSlot;
 using Kingmaker.UI.ServiceWindow;
 using Kingmaker.UnitLogic;
@@ -185,6 +188,11 @@ namespace TweakOrTreat
             
         }
 
+        public override void OnFactDeactivate()
+        {
+            Owner.RemoveFact(update);
+        }
+
         // Token: 0x0400587C RID: 22652
         public BlueprintUnitFact old;
         public BlueprintUnitFact update;
@@ -194,11 +202,11 @@ namespace TweakOrTreat
     {
 
     }
-
+    
     //[HarmonyLib.HarmonyPatch(typeof(CharDollBase), "SetupInfo")]
     [HarmonyLib.HarmonyPatch(typeof(CharDollBase), nameof(CharDollBase.SetupInfo))]
     [HarmonyLib.HarmonyBefore("CallOfTheWild")]
-    class Game_PauseBind_Patch
+    class CharDollBase_SetupInfo_Patch
     {
         static bool Prepare()
         {
@@ -272,6 +280,64 @@ namespace TweakOrTreat
             return true;
         }
     }
+
+    public class SizedWeapon : BlueprintComponent
+    {
+        public Size size;
+    }
+
+    [HarmonyLib.HarmonyPatch(typeof(ItemEntityWeapon), "get_Size")]
+    class ItemEntityWeapon_Size
+    {
+        static bool Prepare()
+        {
+            return true;
+        }
+
+        static bool Prefix(ItemEntityWeapon __instance, ref Size __result)
+        {
+            var sizedWeapon = __instance.Blueprint.GetComponent<SizedWeapon>();
+            //Main.logger.Log($"sized weapon {sizedWeapon}");
+            if (sizedWeapon != null)
+            {
+                //Main.logger.Log($"sized weapon size {sizedWeapon.size}");
+                //Main.logger.Log($"damage {__instance.Blueprint.ScaleDamage(sizedWeapon.size)}");
+                //Main.logger.Log($"damage2 {WeaponDamageScaleTable.Scale(__instance.Blueprint.ScaleDamage(sizedWeapon.size), sizedWeapon.size, Size.Medium, __instance.Blueprint)}");
+                
+                __result = sizedWeapon.size;
+                return false;
+            }
+
+            return true;
+        }
+
+        //static void Postfix(ItemEntityWeapon __instance, Size __result)
+        //{
+        //    Main.logger.Log($"postdix size {__result}");
+        //}
+    }
+
+    //[HarmonyLib.HarmonyPatch(typeof(RuleCalculateWeaponStats), "OnTrigger")]
+    //class RuleCalculateWeaponStats_
+    //{
+    //    static bool Prepare()
+    //    {
+    //        return true;
+    //    }
+
+    //    static bool Prefix(RuleCalculateWeaponStats __instance)
+    //    {
+    //        DiceFormula diceFormula = __instance.WeaponDamageDiceOverride ?? __instance.Weapon.Blueprint.BaseDamage;
+    //        DiceFormula dice = ((__instance.WeaponDamageDiceOverride == null && __instance.Weapon.Blueprint.IsDamageDiceOverridden && (!__instance.Initiator.IsPlayerFaction || __instance.Initiator.Body.IsPolymorphed) && !__instance.IsDefaultUnit) || __instance.DoNotScaleDamage) ? diceFormula : WeaponDamageScaleTable.Scale(diceFormula, __instance.WeaponSize, Size.Medium, __instance.Weapon.Blueprint);
+    //        //DamageDescription damageDescriptor = __instance.Weapon.Blueprint.DamageType.GetDamageDescriptor(dice, __instance.Initiator.Stats.AdditionalDamage + __instance.BonusDamage);
+    //        Main.logger.Log($"diceFormula {diceFormula.Dice}");
+    //        Main.logger.Log($"dice {dice.Dice}");
+    //        Main.logger.Log($"unshifted weapon size {__instance.Weapon.Size}");
+    //        Main.logger.Log($"weapon size {__instance.WeaponSize}");
+    //        Main.logger.Log($"size shift {__instance.m_SizeShift}");
+    //        return true;
+    //    }
+    //}
 
     class Stonelord
     {
@@ -355,74 +421,20 @@ namespace TweakOrTreat
             var bullGreaterRush = library.Get<BlueprintFeature>("72ba6ad46d94ecd41bad8e64739ea392");
             var cleave = library.Get<BlueprintFeature>("d809b6c4ff2aaff4fa70d712a70f7d7b");
             //overrun? maybe it can work
-
-            var powerAttack = library.Get<BlueprintFeature>("9972f33f977fc724c838e59641b2fca5");
-            //var overrunAbilityOld = library.CopyAndAdd<BlueprintAbility>("1a3b471ecea51f7439a946b23577fd70", "OverrunNotTrampleAbilityOld", "");
-            var overrunAbility = library.CopyAndAdd<BlueprintAbility>("1a3b471ecea51f7439a946b23577fd70", "OverrunNotTrampleAbility", "");
-            //overrunAbility.ReplaceComponent<AbilityCustomOverrun>(
-            //    a => {
-            //        a.FirstTargetOnly = true;
-            //        //a.StopOnCorpulence = true;
-            //    }
+            //var mediumSlam = library.Get<BlueprintItemWeapon>("bbdf5d550dc406640a77c5d2a05244ca");
+            //mediumSlam.AddComponent(
+            //    Helpers.Create<SizedWeapon>(
+            //        s => s.size = Size.Small
+            //    )
             //);
-
-            //overrunAbility.ReplaceComponent<AbilityCustomOverrun>(
-            //    new TweakOrTreat.MyOverrun()
-            //);
-
-            overrunAbility.RemoveComponents<AbilityCustomOverrun>();
-            overrunAbility.AddComponent(
-                Helpers.Create<MyOverrun>(
-                    o =>
-                    {
-                        o.Actions = Helpers.CreateActionList();
-                        
-                    }
-                )
-            );
-            overrunAbility.SetNameDescription(
-                "Overrun",
-                "You can attempt to run over your target, trampling them underfoot.\nIf your maneuver is successful, you will move through the target's space. If your attack exceeds your opponent's CMD by 5 or more, you move through the target's space and the target is knocked prone.\nIf your attempt fails, you halt in the space directly in front of the opponent, or the nearest unoccupied space in front of the target."
-            );
-            overrunAbility.LocalizedSavingThrow = Helpers.savingThrowNone;
-
-            var overrunFeature = Helpers.CreateFeature(
-                "ImprovedOverrunFeature",
-                "Improved Overrun",
-                "You do not provoke an attack of opportunity when performing an overrun combat maneuver. In addition, you receive a +2 bonus on checks made to overrun a foe. You also receive a +2 bonus to your Combat Maneuver Defense whenever an opponent tries to overrun you. Targets of your overrun attempt may not chose to avoid you.",
-                "",
-                overrunAbility.Icon,
-                FeatureGroup.Feat,
-               // overrunAbilityOld.CreateAddFact(),
-                overrunAbility.CreateAddFact(),
-                Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
-                Common.createManeuverDefenseBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
-                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Strength, 13),
-                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.BaseAttackBonus, 1),
-                powerAttack.PrerequisiteFeature()
-            );
-
-            var greaterOverrunFeature = Helpers.CreateFeature(
-                "GreaterOverrunFeature",
-                "Greater Overrun",
-                "You receive a +2 bonus on checks made to overrun a foe. This bonus stacks with the bonus granted by Improved Overrun. Whenever you overrun opponents, they provoke attacks of opportunity if they are knocked prone by your overrun.",
-                "",
-                overrunAbility.Icon,
-                FeatureGroup.Feat,
-                Helpers.Create<ManeuverProvokeAttack>(m => m.ManeuverType = Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun),
-                Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
-                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.Strength, 13),
-                Helpers.PrerequisiteStatValue(Kingmaker.EntitySystem.Stats.StatType.BaseAttackBonus, 6),
-                powerAttack.PrerequisiteFeature(),
-                overrunFeature.PrerequisiteFeature()
-            );
+            
 
             var missingFeatures = new List<BlueprintFeature>[] {
                 new List<BlueprintFeature>(){ bullRush }, //elementalSmall,
                 new List<BlueprintFeature>(){ cleave }, //elementalMedium,
-                new List<BlueprintFeature>(){ bullGreaterRush, overrunFeature }, //elementalLarge,
+                new List<BlueprintFeature>(){ bullGreaterRush, Overrun.overrunFeature }, //elementalLarge,
                 new List<BlueprintFeature>(){ }, //elementalHuge,
-                new List<BlueprintFeature>(){ greaterOverrunFeature }, //elementalGreater,
+                new List<BlueprintFeature>(){ Overrun.greaterOverrunFeature }, //elementalGreater,
                 new List<BlueprintFeature>(){ }  //elementalElder
             };
 
@@ -439,18 +451,27 @@ namespace TweakOrTreat
 
                 var slams = new LinkedList<BlueprintItemWeapon>(elemental.Body.AdditionalLimbs);
 
+                var slam = library.CopyAndAdd(slams.First.Value, $"StaticSizedSlam{i}", "");
+
+                //slam.m_Size = Size.Gargantuan;//(Size)(Size.Medium - (elemental.Size - Size.Medium - 1));
+                slam.AddComponent(
+                    Helpers.Create<SizedWeapon>(
+                        s => s.size = Size.Medium
+                    )
+                );
+
                 if (slams.Count > 0)
                 {
-                    elemental.Body.PrimaryHand = slams.First();
+                    elemental.Body.PrimaryHand = slam;
                     slams.RemoveFirst();
                 }
                 if (slams.Count > 0)
                 {
-                    elemental.Body.SecondaryHand = slams.First();
+                    elemental.Body.SecondaryHand = slam;
                     slams.RemoveFirst();
                 }
 
-                elemental.Body.AdditionalLimbs = slams.ToArray();
+                elemental.Body.AdditionalLimbs = Enumerable.Repeat(slam, slams.Count).ToArray();
                 elemental.Body.EmptyHandWeapon = emptyHand;
                 elemental.Body.DisableHands = false;
 
@@ -481,7 +502,7 @@ namespace TweakOrTreat
                 //addSmallElemental.ReapplyOnLevelUp = true;
 
                 addElemental.ReplaceComponent<AddPet>(a => { a.Pet = elemental; a.UpgradeLevel = 100; a.LevelRank = null; });
-
+                addElemental.IsClassFeature = true;
                 addElementals.Add(addElemental);
             }
 
@@ -516,8 +537,9 @@ namespace TweakOrTreat
                             r.update = next;
                         }
                     )
+                    
                 );
-
+                replaceCompanion.IsClassFeature = true;
                 replaceCompanions.Add(replaceCompanion);
             }
 

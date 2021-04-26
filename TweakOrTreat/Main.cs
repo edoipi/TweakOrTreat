@@ -15,6 +15,9 @@ using Newtonsoft.Json;
 using System.IO;
 using Newtonsoft.Json.Linq;
 using CallOfTheWild;
+using Kingmaker.Blueprints.Classes.Selection;
+using Kingmaker.Blueprints.Items.Weapons;
+using Kingmaker.View.Animation;
 
 namespace TweakOrTreat
 {
@@ -26,6 +29,8 @@ namespace TweakOrTreat
         public static bool noHandInTheAir;
         public static bool noTwoHandedRapier;
         public static bool advisorUseMaxStat;
+        public static bool spellSlotsFromPermanentBonusOnly;
+        public static bool reduceSpellSlotsFromAbilityDrain;
         internal class Settings
         {
             internal Settings()
@@ -42,6 +47,8 @@ namespace TweakOrTreat
                     noHandInTheAir = (bool)jo["no_hand_in_the_air"];
                     noTwoHandedRapier = (bool)jo["no_two_handed_rapier"];
                     advisorUseMaxStat = (bool)jo["advisor_use_max_stat"];
+                    spellSlotsFromPermanentBonusOnly = (bool)jo["spell_slots_from_permanent_bonus_only"];
+                    reduceSpellSlotsFromAbilityDrain = (bool)jo["reduce_spell_slots_from_ability_drain"];
 #if DEBUG
                     advisorUseMaxStat = true;
 #endif
@@ -127,14 +134,17 @@ namespace TweakOrTreat
                     //Bullshit.load();
 
                     WeaponFamiliarity.load();
+                    Overrun.load();
+
                     UniversalRacialTraits.load();
 
                     OceansEcho.load();
-
                     
 
-                    
                     Mindchemist.load();
+
+                    BoneSpikeMutagen.load();
+
                     MutationWarrior.load();
                     ExtraDiscovery.load();
                     WildStalker.load();
@@ -170,7 +180,20 @@ namespace TweakOrTreat
                     Aaasimar.load();
                     Elf.load();
                     Dwarf.load();
+
+                    Siegebreaker.load();
+
+                    UnbalancingTrick.load();
+
+                    MasterChymist.load();
+
+                    KineticEnhancement.load();
+
                     //Planetouched.load();
+
+                    //var bastard_sword_type = library.Get<BlueprintWeaponType>("d2fe2c5516b56f04da1d5ea51ae3ddfe");
+                    //WeaponVisualParameters bs_visuals = GetField<WeaponVisualParameters>(bastard_sword_type, "m_VisualParameters");
+                    //SetField(bs_visuals, "m_WeaponAnimationStyle", WeaponAnimationStyle.SlashingOneHanded);
 
 #if DEBUG
                     string guid_file_name = @"./Mods/TweakOrTreat/blueprints.txt";
@@ -186,6 +209,16 @@ namespace TweakOrTreat
                 }
             }
         }
+
+        //public static T GetField<T>(object obj, string name)
+        //{
+        //    return (T)HarmonyLib.AccessTools.Field(obj.GetType(), name).GetValue(obj);
+        //}
+
+        //public static void SetField(object obj, string name, object value)
+        //{
+        //    HarmonyLib.AccessTools.Field(obj.GetType(), name).SetValue(obj, value);
+        //}
 
         [HarmonyLib.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary")]
         [HarmonyLib.HarmonyPatch(typeof(LibraryScriptableObject), "LoadDictionary", new Type[0])]
@@ -215,8 +248,15 @@ namespace TweakOrTreat
                     HalfElf.load();
 
                     HalfOrc.load();
+
+                    var multitalented = library.TryGet<BlueprintFeatureSelection>("e6a72a23e75545bc9a57a6b94ffc8b69");
+                    if (multitalented != null) {
+                        HeirloomWeapon.load();
+
+                        PrestigiousSpellcaster.load();
+                    }
 #if DEBUG
-                    
+
                     CallOfTheWild.Helpers.GuidStorage.dump(guid_file_name);
 #endif
                     CallOfTheWild.Helpers.GuidStorage.dump(@"./Mods/TweakOrTreat/loaded_blueprints.txt");

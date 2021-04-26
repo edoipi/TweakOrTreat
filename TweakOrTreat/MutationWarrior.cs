@@ -57,8 +57,10 @@ namespace TweakOrTreat
         }
     }
 
-    class MutationWarrior
+    public class MutationWarrior
     {
+        public static BlueprintArchetype archetype;
+
         static void addMutagenScaling(BlueprintFeature mutagen, BlueprintCharacterClass fighter, BlueprintFeature warriorMutagen)
         {
             var spell_level_comps = mutagen.GetComponents<SpellLevelByClassLevel>().ToArray();
@@ -76,10 +78,10 @@ namespace TweakOrTreat
         }
 
         static LibraryScriptableObject library => Main.library;
-        static internal void load()
+        static public void load()
         {
             var fighter = Helpers.GetClass("48ac8db94d5de7645906c7d0ad3bcfbd");
-            var archetype = Helpers.Create<BlueprintArchetype>(a =>
+            archetype = Helpers.Create<BlueprintArchetype>(a =>
             {
                 a.name = "MutationWarriorArchetype";
                 a.LocalizedName = Helpers.CreateString($"{a.name}.Name", "Mutation Warrior");

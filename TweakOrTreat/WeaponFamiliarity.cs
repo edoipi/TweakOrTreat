@@ -158,6 +158,7 @@ namespace TweakOrTreat
 
         public static BlueprintFeature halflingWeaponFamiliarity;
         public static BlueprintFeature gnomeWeaponFamiliarity;
+        public static Dictionary<BlueprintRace, BlueprintFeature>  raceToFamiliarity;
         static internal void load()
         {
             var martialWeaponProficiency = library.Get<BlueprintFeature>("203992ef5b35c864390b4e4a1e200629");
@@ -189,7 +190,7 @@ namespace TweakOrTreat
             var gnome = library.Get<BlueprintRace>("ef35a22c9a27da345a4528f0d5889157");
             gnome.Features = gnome.Features.AddToArray(gnomeWeaponFamiliarity);
 
-            var raceToFamiliarity = new Dictionary<BlueprintRace, BlueprintFeature>() {
+            raceToFamiliarity = new Dictionary<BlueprintRace, BlueprintFeature>() {
                 {elf, elvenWeaponFamiliarity},
                 {dwarf, dwarvenWeaponFamiliarity},
                 {halforc, orcWeaponFamiliarity},
@@ -204,7 +205,7 @@ namespace TweakOrTreat
                 {
                     if(raceToFamiliarity.ContainsKey(c.RaceRestriction))
                     {
-                        var newAddProf = new AddProficienciesIfFeature();
+                        var newAddProf = Helpers.Create<AddProficienciesIfFeature>();
                         newAddProf.ArmorProficiencies = c.ArmorProficiencies;
                         newAddProf.WeaponProficiencies = c.WeaponProficiencies;
                         newAddProf.feature = raceToFamiliarity[c.RaceRestriction];

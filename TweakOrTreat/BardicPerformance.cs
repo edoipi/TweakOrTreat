@@ -33,14 +33,13 @@ namespace TweakOrTreat
             BlueprintArchetype sensei = library.Get<BlueprintArchetype>("f8767821ec805bf479706392fcc3394c");
             BlueprintArchetype evangelist = CallOfTheWild.Archetypes.Evangelist.archetype;
             var oceansEcho = OceansEcho.archetype;
-
-            var cleric = library.Get<BlueprintCharacterClass>("67819271767a9dd4fbfd4ae700befea0");
-            var monk = library.Get<BlueprintCharacterClass>("e8f21e5b58e0569468e420ebea456124");
+            
 
             addFastPerfromance(sensei, "a sensei ");
             addFastPerfromance(evangelist, "an evangelist ");
             addFastPerfromance(oceansEcho, "an ocean’s echo ");
             addFastPerfromance(OathOfThePeoplesCouncil.archetype, "an oathbound paladin ");
+            addFastPerfromance(CallOfTheWild.Brawler.exemplar, "an exemplar ");
         }
     }
 }

@@ -3,6 +3,7 @@ Requires Call of the Wild and Races Unleashed to run, optionally Favored Class f
 Warning: from version 0.2.0 Call of the Wild version required is 1.112. What is more any Wild Stalker that is at least level 4 should be respecced to make rage powers work properly.
 
 Features:
+- Master Chymist prestige class
 - Mindchemist Alchemist archetype - alchemist with cognatogen instead of mutagen
 - Mutation Warrior Fighter archetype - fighter with mutagen
 - Wild Stalker Ranger archetype - ranger with rage
@@ -16,16 +17,16 @@ Features:
 - Oath of the People's Council paladin - paladin mixed with bard
 - Halcyon Druid - druid with access to arcane
 - Ancient Lorekeeper Oracle - oracle with arcane spells
+- Siegbreaker Fighter - fighter specialized in overrun and bull rush
 - Alternative racial traits:  
 	* aasimar: Crusading Magic
 	* elf: Moonkissed, Human Raised, Illustrious Urbanite, Overwhelming Magic, Long Limbed, Fey Thoughts, Dreamspeaker
-	* dwarf: Iron Within, traits ported from Races Unleashed: Iron Citizen, Magic Resistant, Unstoppable, Wanderer
+	* dwarf: Iron Within, traits ported from Races Unleashed: Iron Citizen, Magic Resistant, Unstoppable, Wanderer, Relentless
 	* halfling: Fleet of Foot, Caretaker, Fey Thoughts
 	* human: Awarness, Dual Talent, Giant Ancestry, Heart of the Fey, Military Tradition, Powerful Presence, Unstoppable Magic, Adoptive Parentage, Eye for Talent, Focused Study
 	* half-elf: Dual Minded, Weapon Familiarity, Drow-Trained, Spell Resistance, Multidisciplined(requires Favored Class), Fey Thoughts(requires Favored Class)
 	* half orc: Shamans Apprentice, Burning Assurance, Shaman Enhancement, Projection
 
-- Fey Thoughts
 - Extra Discovery feat
 - Arcane Discovery arcanist exploit
 - Unification of ki between classes
@@ -34,12 +35,20 @@ Features:
 - Arsenal Chaplain gets acces to Advanced Weapon Training - might be overpowered so be careful
 - Extra deities with nice domains: Ragathiel, Tsukiyo and Gruhastha
 - Fey Spell Versatility for ranger and hunter
+- Improved Overrun and Greater Overrun
+- Bulette Style, Leap and Rampage
+- Overbearing Advance and Onslaught
+- Unbalancing Trick for Rogue, Investigator and Slayer
+- Bone-Spike Mutagen Discovery
+- Kinetic Enhancement Psi-Tech Discovery for Psychics and Psychic Detectives
+
 optional:
 - move and swift action bardic performance for ocean's echo oracle, sensei monk and evangelist cleric
 - hold weapons in two hands in inventory preview - experimental
 - replace estoc and rapier animation with one handed slashing weapon animation(still bad but in some ways looks better)
 - if holding weapon in one hand with other hand empty, character does not keep the empty hand high in the air
 - advisors use their highest stat instead of the one normally used at their current role(disabled by default)
+- spell slots are calulated only from permanent stat bonuses and ability drain(optional)
 
 Details:
 Mindchemist's Perfect Recall affects both "Knowledge" and "Lore" skills.
@@ -71,6 +80,11 @@ Arcane Discovery exploit is not accessible for exploiter wizard.
 Unification of ki between classes: it makes it so every monk type, sacred fist warpriest, ninja and rogue with ki pool talent use the same resource, so multiclass characters can use their ki on abilities from any of those classes. When it comes to getting bonus to ki pool from stat you get it from all the stats that your classes allow, but only once per stat. For example monk/ninja will have pool scaling with wisdom and charisma, but scaled fist/ ninja will scale only with charisma bonus and not charisma bonus*2.
 Sensei, evangelist and ocean's echo  get move and swift bardic performance at level 7 and 13, as I believe it should be per pnp rule.
 This component can be turned off in settings.
+
+If `spell_slots_from_permanent_bonus_only` is set to true spell slots will be calulated only from permanent stat bonuses. That mean only Racial, Insight and bonuses from items count. Ability damage does not reduce spell slots. Because of that you do not lose spells slots after dirinking mutagen and you do not gain useless temporary slots coming from buffs like cognatogen. If `reduce_spell_slots_from_ability_drain` is set to true ability drain will reduce spell slots(but ability damage still will not). To my knowledge it is all acording to pnp rules.
+
+Master Chymist allows you to gain sneak attack like a vivisectionist if you did not have bombs feature before qualifying.
+
 Credits:
 Holic92 both for Call of the Wild and direct help. This mod capitalizes a lot on Call of the Wild by directly using functions made by Holic and as reference to see how things can be done. Without it it would most likely never have been made.
 Spacehamster for Races Unleashed and tutoring.

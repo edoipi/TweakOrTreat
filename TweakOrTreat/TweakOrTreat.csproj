@@ -33,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <InstallDir Condition=" '$(InstallDir)' == '' ">D:\Program Files (x86)\Steam\steamapps\common\Pathfinder Kingmaker</InstallDir>
@@ -44,7 +45,7 @@
     <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)TweakOrTreat/lib/" PubliciseCompilerGenerated="true" />
   </Target>
   <PropertyGroup>
-    <ReferencePath>$(SolutionDir)TweakOrTreat\lib;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\RacesUnleashed;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\Derring-Do</ReferencePath>
+    <ReferencePath>$(SolutionDir)TweakOrTreat\lib;$(KINGMAKER_HOME)\Kingmaker_Data\Managed\UnityModManager;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\RacesUnleashed;$(KINGMAKER_HOME)\Mods\CallOfTheWild;$(KINGMAKER_HOME)\Mods\Derring-Do;$(KINGMAKER_HOME)\Mods\ZFavoredClass</ReferencePath>
   </PropertyGroup>
   <PropertyGroup>
     <KingmakerManaged>$(KINGMAKER_HOME)\Kingmaker_Data\Managed</KingmakerManaged>
@@ -78,6 +79,10 @@
     </Reference>
     <Reference Include="Derring-Do">
       <HintPath>Derring-Do.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ZFavoredClass">
+      <HintPath>ZFavoredClass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -148,7 +153,9 @@
     <Compile Include="ArcaneDiscoveryExploit.cs" />
     <Compile Include="AWT.cs" />
     <Compile Include="BardicPerformance.cs" />
+    <Compile Include="BoneSpikeMutagen.cs" />
     <Compile Include="Bullshit.cs" />
+    <Compile Include="CustomPortrait.cs" />
     <Compile Include="Deities.cs" />
     <Compile Include="Dwarf.cs" />
     <Compile Include="Elf.cs" />
@@ -159,16 +166,23 @@
     <Compile Include="Halcyon.cs" />
     <Compile Include="HalfElf.cs" />
     <Compile Include="HalfOrc.cs" />
+    <Compile Include="HeirloomWeapon.cs" />
     <Compile Include="HolyGuide.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Halfling.cs" />
     <Compile Include="Ki.cs" />
+    <Compile Include="KineticEnhancement.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MyOverrun.cs" />
+    <Compile Include="MasterChymist.cs" />
+    <Compile Include="Overrun.cs" />
+    <Compile Include="OverrunAbilityLogic.cs" />
     <Compile Include="Myrmidarch.cs" />
     <Compile Include="OathAgainstChaos.cs" />
     <Compile Include="OathOfThePeoplesCouncil.cs" />
     <Compile Include="PactWizard.cs" />
+    <Compile Include="PrestigiousSpellcaster.cs" />
+    <Compile Include="Siegebreaker.cs" />
+    <Compile Include="SpellbookFix.cs" />
     <Compile Include="Stonelord.cs" />
     <Compile Include="SylvanTrickster.cs" />
     <Compile Include="Mindchemist.cs" />
@@ -182,6 +196,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UnbalancingTrick.cs" />
     <Compile Include="UniversalRacialTraits.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VirtuosoBravo.cs" />
@@ -211,6 +226,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Content Include="Icons\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PrestigiousSpellcaster\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

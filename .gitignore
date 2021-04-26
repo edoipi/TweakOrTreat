@@ -336,3 +336,6 @@ ASALocalRun/
 
 # Library Dependencies
 [Ll]ibs/
+
+TweakOrTreat/lib
+Sprite/

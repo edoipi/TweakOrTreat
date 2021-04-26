@@ -164,13 +164,25 @@ namespace TweakOrTreat
 
             var feyThought = UniversalRacialTraits.makeFeyThoughts("Dwarf", hatredComponents);
 
+            var relentless = Utils.CreateFeature("RelentlessDwarfFeature", "Relentless",
+                "Dwarves are skilled at pushing their way through a battlefield, tossing aside lesser foes with ease. Dwarves with this racial trait receive a +2 bonus on combat maneuver checks made to bull rush or overrun an opponent.",
+                "", null, FeatureGroup.Racial,
+                stabilityComponents,
+                new BlueprintComponent[]
+                {
+                    Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.Overrun, 2),
+                    Common.createManeuverBonus(Kingmaker.RuleSystem.Rules.CombatManeuver.BullRush, 2)
+                }
+            );
+
             RacesUnleashed.RacialTraits.AddAlternativeRacialTraitsSelection(dwarf, 3, new List<BlueprintFeature>() {
                 ironCitizen,
                 magicResistant,
                 unstoppable,
                 wanderer,
                 ironWithin,
-                feyThought
+                feyThought,
+                relentless
             });
         }
     }
