@@ -17,7 +17,7 @@ namespace TweakOrTreat
     {
         static LibraryScriptableObject library => Main.library;
         static string feyThoughtsName = "Fey Thoughts";
-        static string feyThoughtsDesc = "he character sees the world more like a native of the First World. " +
+        static string feyThoughtsDesc = "The character sees the world more like a native of the First World. " +
             "Select two of the following skills: Mobility, Bluff, Diplomacy, Stealth, Lore (nature), Perception, Trickery, or Use Magic Device. The selected skills are always class skills for the character.";
         static BlueprintFeatureSelection classSkillsFeatureSelection;
 
@@ -51,6 +51,10 @@ namespace TweakOrTreat
                 StatType.SkillLoreNature, StatType.SkillPerception, StatType.SkillThievery, StatType.SkillUseMagicDevice
             };
 
+            var otherSkills = new List<StatType>() {
+                StatType.CheckBluff, StatType.CheckDiplomacy
+            };
+
             var classSkills = new List<BlueprintFeature>();
 
             foreach(var skill in skills)
@@ -61,9 +65,18 @@ namespace TweakOrTreat
                     feyThoughtsDesc,
                     "",
                     null,
-                    FeatureGroup.None,
-                    Helpers.Create<AddClassSkill>(a => a.Skill = skill)
+                    FeatureGroup.None
                 );
+
+                if(!otherSkills.Contains(skill))
+                {
+                    feature.AddComponent(Helpers.Create<AddClassSkill>(a => a.Skill = skill));
+                }
+                else
+                {
+                    feature.AddComponent(Helpers.Create<CallOfTheWild.NewMechanics.AddBonusToSkillCheckIfNoClassSkill>(a => { a.skill = StatType.SkillPersuasion; a.check = skill; }));
+                }
+
                 classSkills.Add(feature);
             }
 

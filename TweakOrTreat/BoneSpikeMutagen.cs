@@ -27,10 +27,10 @@ namespace TweakOrTreat
                 "Bone-Spike Mutagen",
                 "When the alchemist imbibes a mutagen, he mutates his skeletal structure, causing the bones on his elbows, knuckles, spine, and shoulder blades to grow massive and pierce his skin, exposing themselves as large spikes. While the mutagen is in effect, the alchemist’s natural armor bonus granted by the mutagen increases by 2.",
                 new BlueprintComponent[] {
-                    Helpers.PrerequisiteClassLevel(alchemist, 6),
                     Helpers.CreateAddStatBonus(Kingmaker.EntitySystem.Stats.StatType.AC, 2, Kingmaker.Enums.ModifierDescriptor.NaturalArmor)
                 }
             );
+            boneSpike.AddComponent(Helpers.PrerequisiteClassLevel(alchemist, 6));
 
             foreach(var s in selections)
             {

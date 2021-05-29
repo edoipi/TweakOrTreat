@@ -1,4 +1,5 @@
 ﻿using CallOfTheWild;
+using CallOfTheWild.AdditionalSpellDescriptors;
 using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Classes;
 using Kingmaker.Blueprints.Classes.Prerequisites;
@@ -231,6 +232,22 @@ namespace TweakOrTreat
                 }
             );
 
+            var aquaticMastery = Utils.CreateFeature("AquaticMasteryFeature", "Aquatic Mastery",
+                "Some aquatic elves are able to wield the power of the sea with great prowess. Elves with this racial trait increase the DC of any spell with the water descriptor they cast by 1.",
+                "", null, FeatureGroup.Racial,
+                elvenWeaponFamiliarityComponents,
+                new BlueprintComponent[]
+                {
+                    Helpers.Create<IncreaseSpellDescriptorDC>(
+                        c =>
+                        {
+                            c.Descriptor = (SpellDescriptor)ExtraSpellDescriptor.Water;
+                            c.BonusDC = 1;
+                        }
+                    ),
+                }
+            );
+
             RacesUnleashed.RacialTraits.AddAlternativeRacialTraitsSelection(elf, 3, new List<BlueprintFeature>() {
                 moonkissed,
                 humanRaised,
@@ -238,7 +255,8 @@ namespace TweakOrTreat
                 overwhelmingMagic,
                 longLimbed,
                 feyThought,
-                dreamspeaker
+                dreamspeaker,
+                aquaticMastery
             });
         }
     }

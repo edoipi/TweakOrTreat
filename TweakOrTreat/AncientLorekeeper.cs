@@ -216,7 +216,7 @@ namespace TweakOrTreat
             var newSpellsByLevel = new SpellLevelList[newWizardSpellList.SpellsByLevel.Length+1];
             for (int i = 0; i < newWizardSpellList.SpellsByLevel.Length; i++)
             {
-                newSpellsByLevel[i+1] = new SpellLevelList();
+                newSpellsByLevel[i+1] = new SpellLevelList(newWizardSpellList.SpellsByLevel[i].SpellLevel + 1);
                 newSpellsByLevel[i+1].SpellLevel = newWizardSpellList.SpellsByLevel[i].SpellLevel + 1;
                 newSpellsByLevel[i+1].Spells = newWizardSpellList.SpellsByLevel[i].Spells;
             }

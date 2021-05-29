@@ -153,11 +153,14 @@
     <Compile Include="ArcaneDiscoveryExploit.cs" />
     <Compile Include="AWT.cs" />
     <Compile Include="BardicPerformance.cs" />
+    <Compile Include="BenthicSpell.cs" />
     <Compile Include="BoneSpikeMutagen.cs" />
+    <Compile Include="BuffTickFix.cs" />
     <Compile Include="Bullshit.cs" />
     <Compile Include="CustomPortrait.cs" />
     <Compile Include="Deities.cs" />
     <Compile Include="Dwarf.cs" />
+    <Compile Include="ElementalMaster.cs" />
     <Compile Include="Elf.cs" />
     <Compile Include="Estoc.cs" />
     <Compile Include="ExtraDiscovery.cs" />
@@ -170,6 +173,7 @@
     <Compile Include="HolyGuide.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Halfling.cs" />
+    <Compile Include="InventorySort.cs" />
     <Compile Include="Ki.cs" />
     <Compile Include="KineticEnhancement.cs" />
     <Compile Include="Main.cs" />
@@ -200,6 +204,7 @@
     <Compile Include="UniversalRacialTraits.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VirtuosoBravo.cs" />
+    <Compile Include="VoidSchool.cs" />
     <Compile Include="WeaponFamiliarity.cs" />
     <Compile Include="WildStalker.cs" />
   </ItemGroup>

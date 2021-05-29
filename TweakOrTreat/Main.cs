@@ -84,7 +84,13 @@ namespace TweakOrTreat
                 logger = modEntry.Logger;
 
                 harmony = new HarmonyLib.Harmony(modEntry.Info.Id);
+
+                //Environment.SetEnvironmentVariable("MONOMOD_DMD_TYPE", "cecil");
+                //Environment.SetEnvironmentVariable("MONOMOD_DMD_DUMP", "./mmdump");
+
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+                //Environment.SetEnvironmentVariable("MONOMOD_DMD_DUMP", "");
             }
             catch (Exception ex)
             {
@@ -188,6 +194,12 @@ namespace TweakOrTreat
                     MasterChymist.load();
 
                     KineticEnhancement.load();
+
+                    VoidSchool.load();
+
+                    BenthicSpell.load();
+
+                    ElementalMaster.load();
 
                     //Planetouched.load();
 
